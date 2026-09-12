@@ -1,0 +1,2004 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hospitality Service Profile</title>
+  <meta name="description"
+    content="An interactive hospitality service assessment tool that builds your service profile through scenario-based learning." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    /* ─── Design Tokens ─────────────────────────────────────────────── */
+    :root {
+      --teal-900: #0d2b2b;
+      --teal-800: #0f3535;
+      --teal-700: #134040;
+      --teal-600: #165252;
+      --teal-500: #1a6666;
+      --teal-400: #2a8a8a;
+      --teal-300: #4ab0b0;
+      --teal-200: #7dd0d0;
+      --teal-100: #b8e8e8;
+      --teal-50: #e6f7f7;
+      --gold-600: #b8860b;
+      --gold-500: #d4a017;
+      --gold-400: #e8b830;
+      --gold-300: #f0cc60;
+      --gold-200: #f7e099;
+      --gold-100: #fdf3d0;
+      --surface: #0f3535;
+      --surface2: #134040;
+      --surface3: #165252;
+      --border: rgba(212, 160, 23, 0.2);
+      --border2: rgba(212, 160, 23, 0.4);
+      --text-primary: #f0f9f9;
+      --text-secondary: #a8d8d8;
+      --text-muted: #6aacac;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
+      --shadow-gold: 0 0 30px rgba(212, 160, 23, 0.15);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--teal-900);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      background-image:
+        radial-gradient(ellipse at 10% 0%, rgba(26, 102, 102, 0.35) 0%, transparent 55%),
+        radial-gradient(ellipse at 90% 100%, rgba(212, 160, 23, 0.08) 0%, transparent 50%);
+    }
+
+    /* ─── Header ────────────────────────────────────────────────────── */
+    header {
+      background: linear-gradient(135deg, var(--teal-800) 0%, var(--teal-900) 100%);
+      border-bottom: 1px solid var(--border2);
+      padding: 0 2rem;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .header-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--gold-500), var(--gold-400));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      box-shadow: 0 2px 12px rgba(212, 160, 23, 0.35);
+      flex-shrink: 0;
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: 0.01em;
+    }
+
+    header h1 span {
+      color: var(--gold-400);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .header-badge {
+      background: rgba(212, 160, 23, 0.12);
+      border: 1px solid var(--border2);
+      color: var(--gold-300);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 0;
+      height: calc(100vh - 70px);
+      overflow: hidden;
+    }
+
+    /* ─── Sidebar ───────────────────────────────────────────────────── */
+    .sidebar {
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 1.5rem;
+      gap: 1.25rem;
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .sidebar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: var(--teal-400);
+      border-radius: 4px;
+    }
+
+    .section-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold-400);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border2);
+    }
+
+    .card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold-500), transparent);
+      opacity: 0.6;
+    }
+
+    /* Radar */
+    .radar-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .chart-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-align: center;
+    }
+
+    #radarCanvas {
+      display: block;
+    }
+
+    /* Dimension Pills */
+    .dimensions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 0.25rem;
+    }
+
+    .dim-pill {
+      background: var(--surface3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: border-color var(--transition);
+    }
+
+    .dim-pill.active {
+      border-color: var(--gold-400);
+      box-shadow: 0 0 12px rgba(212, 160, 23, 0.15);
+    }
+
+    .dim-letter {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .dim-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .dim-name {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .dim-sub {
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      line-height: 1.3;
+    }
+
+    .dim-score {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--gold-300);
+    }
+
+    .dim-pill:nth-child(5) {
+      grid-column: 1 / -1;
+    }
+
+    /* Stats */
+    .stats-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .stat-box {
+      background: var(--surface3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--gold-400);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    /* ─── Center Panel ──────────────────────────────────────────────── */
+    .center-panel {
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 2rem;
+      gap: 1.5rem;
+      background: var(--teal-900);
+    }
+
+    .center-panel::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .center-panel::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .center-panel::-webkit-scrollbar-thumb {
+      background: var(--teal-400);
+      border-radius: 4px;
+    }
+
+    /* Scenario Header */
+    .scenario-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .scenario-tag {
+      background: linear-gradient(135deg, rgba(212, 160, 23, 0.15), rgba(212, 160, 23, 0.05));
+      border: 1px solid var(--border2);
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--gold-300);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .scenario-tag .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--gold-400);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.5;
+        transform: scale(0.85);
+      }
+    }
+
+    .scenario-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .category-badge {
+      background: rgba(74, 176, 176, 0.15);
+      border: 1px solid rgba(74, 176, 176, 0.3);
+      color: var(--teal-200);
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* Dialogue Box */
+    .dialogue-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1.75rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dialogue-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--teal-400), var(--gold-400));
+    }
+
+    .dialogue-speaker {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1rem;
+    }
+
+    .speaker-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal-400), var(--teal-600));
+      border: 2px solid var(--teal-300);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    .speaker-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--teal-200);
+    }
+
+    .speaker-role {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+    }
+
+    .dialogue-text {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-primary);
+      font-style: italic;
+      padding: 1rem 1.25rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-left: 3px solid var(--gold-500);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+
+    .dialogue-hint {
+      margin-top: 1rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Choices */
+    .choices-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .choices-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .choice-card {
+      background: var(--surface2);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition), background var(--transition);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .choice-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(212, 160, 23, 0.06), transparent);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+
+    .choice-card:hover {
+      border-color: var(--gold-400);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-gold);
+    }
+
+    .choice-card:hover::before {
+      opacity: 1;
+    }
+
+    .choice-card.selected-correct {
+      border-color: #4ade80;
+      background: rgba(74, 222, 128, 0.06);
+      transform: none;
+      box-shadow: 0 0 24px rgba(74, 222, 128, 0.15);
+    }
+
+    .choice-card.selected-alt {
+      border-color: var(--teal-300);
+      background: rgba(74, 176, 176, 0.06);
+      transform: none;
+      box-shadow: 0 0 24px rgba(74, 176, 176, 0.15);
+    }
+
+    .choice-card.dimmed {
+      opacity: 0.45;
+      pointer-events: none;
+    }
+
+    .choice-letter-badge {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 800;
+      flex-shrink: 0;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    .choice-a .choice-letter-badge {
+      background: rgba(212, 160, 23, 0.15);
+      color: var(--gold-300);
+    }
+
+    .choice-b .choice-letter-badge {
+      background: rgba(74, 176, 176, 0.15);
+      color: var(--teal-200);
+    }
+
+    .choice-card.selected-correct .choice-letter-badge {
+      background: rgba(74, 222, 128, 0.2);
+      color: #4ade80;
+    }
+
+    .choice-card.selected-alt .choice-letter-badge {
+      background: rgba(74, 176, 176, 0.2);
+      color: var(--teal-200);
+    }
+
+    .choice-text {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--text-primary);
+      font-style: italic;
+    }
+
+    .choice-indicator {
+      margin-top: auto;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: color var(--transition);
+    }
+
+    .choice-card.selected-correct .choice-indicator {
+      color: #4ade80;
+    }
+
+    .choice-card.selected-alt .choice-indicator {
+      color: var(--teal-200);
+    }
+
+    /* Progress */
+    .progress-section {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .progress-text {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .progress-pct {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--gold-300);
+    }
+
+    .progress-bar-track {
+      height: 6px;
+      background: var(--surface3);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--teal-400), var(--gold-400));
+      border-radius: 3px;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .progress-bar-fill::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 20px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3));
+    }
+
+    .btn-next {
+      align-self: flex-end;
+      background: linear-gradient(135deg, var(--gold-500), var(--gold-400));
+      color: var(--teal-900);
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 10px 24px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
+      box-shadow: 0 4px 16px rgba(212, 160, 23, 0.3);
+      letter-spacing: 0.03em;
+    }
+
+    .btn-next:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(212, 160, 23, 0.45);
+    }
+
+    .btn-next:active {
+      transform: translateY(0);
+    }
+
+    .btn-next:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* ─── Right Panel ───────────────────────────────────────────────── */
+    .right-panel {
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 1.5rem;
+      gap: 1.25rem;
+    }
+
+    .right-panel::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .right-panel::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .right-panel::-webkit-scrollbar-thumb {
+      background: var(--teal-400);
+      border-radius: 4px;
+    }
+
+    /* Score Grid */
+    .score-grid-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .score-grid-header {
+      display: grid;
+      grid-template-columns: 28px 1fr 44px;
+      gap: 8px;
+      font-size: 0.63rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      padding: 0 2px;
+    }
+
+    .score-row {
+      display: grid;
+      grid-template-columns: 28px 1fr 44px;
+      gap: 8px;
+      align-items: center;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: border-color 0.4s, opacity 0.4s, transform 0.4s;
+    }
+
+    .score-row.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .score-dim-badge {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .score-dim-name {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .score-dim-sub {
+      font-size: 0.6rem;
+      color: var(--text-muted);
+    }
+
+    .score-value-cell {
+      display: flex;
+      justify-content: center;
+    }
+
+    .score-chip {
+      width: 36px;
+      height: 26px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .score-chip.score-2 {
+      background: rgba(74, 222, 128, 0.15);
+      color: #4ade80;
+      border: 1px solid rgba(74, 222, 128, 0.3);
+    }
+
+    .score-chip.score-1 {
+      background: rgba(212, 160, 23, 0.15);
+      color: var(--gold-300);
+      border: 1px solid rgba(212, 160, 23, 0.3);
+    }
+
+    .score-chip.score-0 {
+      background: rgba(248, 113, 113, 0.1);
+      color: #f87171;
+      border: 1px solid rgba(248, 113, 113, 0.25);
+    }
+
+    .score-chip.score-na {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Feedback Bubble */
+    .feedback-bubble {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.1rem;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.5s ease 0.6s, transform 0.5s ease 0.6s;
+    }
+
+    .feedback-bubble.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .feedback-bubble::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold-500), var(--teal-400));
+    }
+
+    .feedback-icon {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+    }
+
+    .feedback-heading {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--gold-300);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+
+    .feedback-text {
+      font-size: 0.85rem;
+      line-height: 1.65;
+      color: var(--text-secondary);
+    }
+
+    .feedback-highlight {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    /* Idle Prompt */
+    .idle-prompt {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .idle-icon {
+      font-size: 2.5rem;
+      opacity: 0.4;
+    }
+
+    .idle-text {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Legend */
+    .score-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .legend-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .legend-chip {
+      width: 26px;
+      height: 18px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 800;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-in {
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    /* Keyboard hint */
+    .kbd-hint {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .kbd {
+      display: inline-block;
+      background: var(--surface3);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-family: monospace;
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+    }
+
+    /* ─── Video Player ──────────────────────────────────────── */
+    .video-player-wrap {
+      position: relative;
+      background: #000;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    .video-player-wrap video {
+      display: block;
+      width: 100%;
+      max-height: 405px;
+      object-fit: contain;
+      background: #000;
+    }
+
+    /* no-video placeholder */
+    .video-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 240px;
+      gap: 10px;
+      background: linear-gradient(135deg, var(--teal-800), var(--teal-900));
+      border: 2px dashed rgba(212, 160, 23, 0.25);
+      border-radius: var(--radius-md);
+      margin-bottom: 1rem;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    .video-placeholder .vph-icon {
+      font-size: 2rem;
+      opacity: 0.4;
+    }
+
+    .video-placeholder .vph-text {
+      opacity: 0.55;
+    }
+
+    /* custom controls bar */
+    .vc-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(6px);
+      padding: 8px 12px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      transition: opacity 0.3s;
+    }
+
+    .video-player-wrap:not(:hover) .vc-bar {
+      opacity: 0.85;
+    }
+
+    .vc-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #fff;
+      font-size: 1rem;
+      padding: 2px 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
+
+    .vc-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .vc-seek {
+      flex: 1;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.2);
+      outline: none;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .vc-seek::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: var(--gold-400);
+      cursor: pointer;
+      box-shadow: 0 0 6px rgba(212, 160, 23, 0.6);
+    }
+
+    .vc-time {
+      font-size: 0.68rem;
+      color: rgba(255, 255, 255, 0.7);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .vc-vol {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 60px;
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.2);
+      outline: none;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .vc-vol::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--teal-300);
+      cursor: pointer;
+    }
+
+    .vc-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--gold-300);
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- START SCREEN -->
+  <div id="startScreen"
+    style="position:fixed; top:0; left:0; width:100%; height:100%; background:var(--teal-900); z-index:9999; display:flex; align-items:center; justify-content:center; padding:1rem; overflow-y:auto; transition:opacity 0.4s;">
+    <div
+      style="max-width:950px; width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:16px; padding:2rem; box-shadow:0 10px 40px rgba(0,0,0,0.5); display:grid; grid-template-columns: 1fr 1.2fr; gap:2.5rem; align-items:center;">
+
+      <!-- LEFT COLUMN: Image & Intro -->
+      <div style="text-align:center;">
+        <h1
+          style="font-family:'Playfair Display',serif; font-size:2.2rem; color:var(--gold-400); margin-bottom:0.8rem; line-height:1.1;">
+          Discover Your Hospitality Service Profile</h1>
+        <p style="color:var(--text-muted); font-size:0.95rem; line-height:1.5; margin-bottom:1.5rem;">Respond naturally
+          to 25 short scenarios to discover your unique service style and strengths.</p>
+        <img src="images/how_to_play.png" alt="How to play"
+          style="width:100%; max-width:280px; border-radius:12px; border:1px solid var(--border); box-shadow:0 8px 24px rgba(0,0,0,0.4);">
+      </div>
+
+      <!-- RIGHT COLUMN: Instructions -->
+      <div style="text-align:left;">
+        <div
+          style="display:flex; flex-direction:column; gap:0.8rem; background:var(--surface1); padding:1.2rem 1.5rem; border-radius:12px; margin-bottom:1.5rem; border:1px solid var(--border2);">
+          <h3
+            style="color:var(--gold-100); font-size:1.1rem; border-bottom:1px solid var(--border); padding-bottom:0.4rem; margin-bottom:0.2rem;">
+            How to Play</h3>
+
+          <div style="display:flex; align-items:flex-start; gap:0.8rem;">
+            <div
+              style="background:var(--teal-700); color:var(--gold-400); width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; flex-shrink:0; font-size:0.85rem;">
+              1</div>
+            <div style="color:var(--text-main); font-size:0.85rem; line-height:1.4;"><strong>Watch &amp;
+                Listen:</strong> Observe the guest's words, tone, and body language.</div>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:0.8rem;">
+            <div
+              style="background:var(--teal-700); color:var(--gold-400); width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; flex-shrink:0; font-size:0.85rem;">
+              2</div>
+            <div style="color:var(--text-main); font-size:0.85rem; line-height:1.4;"><strong>Choose a Response:</strong>
+              Select the approach you feel is most appropriate.</div>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:0.8rem;">
+            <div
+              style="background:var(--teal-700); color:var(--gold-400); width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; flex-shrink:0; font-size:0.85rem;">
+              3</div>
+            <div style="color:var(--text-main); font-size:0.85rem; line-height:1.4;"><strong>Learn:</strong> Read the
+              instant feedback to understand the service impact of your choice.</div>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:0.8rem;">
+            <div
+              style="background:var(--teal-700); color:var(--gold-400); width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; flex-shrink:0; font-size:0.85rem;">
+              4</div>
+            <div style="color:var(--text-main); font-size:0.85rem; line-height:1.4;"><strong>Get Your Profile:</strong>
+              Complete all scenarios to reveal your strongest service dimensions and personalized development areas.
+            </div>
+          </div>
+        </div>
+
+        <p style="color:var(--gold-400); font-size:0.9rem; font-style:italic; margin-bottom:1.5rem; text-align:center;">
+          Watch carefully. Choose naturally. Learn from your choices.</p>
+
+        <div style="text-align:center;">
+          <button onclick="startTraining()"
+            style="background:linear-gradient(135deg,var(--gold-500),var(--gold-400)); color:var(--teal-900); border:none; border-radius:8px; padding:12px 36px; font-size:1.05rem; font-weight:800; cursor:pointer; font-family:'Inter',sans-serif; box-shadow:0 4px 20px rgba(212,160,23,0.35); transition:transform 0.2s;">▶
+            Start Training</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-left">
+      <div class="header-icon">🏨</div>
+      <h1>Hospitality Service <span>Profile</span></h1>
+    </div>
+    <div class="header-right">
+      <div class="header-badge">Interactive Training</div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- ════════════════ SIDEBAR ════════════════ -->
+    <aside class="sidebar" id="gameSidebar" style="display:none">
+      <div class="section-label">สรุป Profile &middot; Profile Summary</div>
+
+      <div class="card">
+        <div class="radar-wrapper">
+          <div class="chart-title">Service Competency Radar</div>
+          <canvas id="radarCanvas" width="220" height="220"></canvas>
+        </div>
+      </div>
+
+      <div class="card" style="padding:1rem">
+        <div class="dimensions-grid" id="dimPills">
+
+          <div class="dim-pill" data-dim="U">
+            <div class="dim-letter" style="background:rgba(212,160,23,0.15);color:#f0cc60">U</div>
+            <div class="dim-info">
+              <div class="dim-name">Understanding</div>
+              <div class="dim-sub">เข้าใจความต้องการ</div>
+            </div>
+            <div class="dim-score" id="score-U">0%</div>
+          </div>
+
+          <div class="dim-pill" data-dim="P">
+            <div class="dim-letter" style="background:rgba(74,176,176,0.15);color:#7dd0d0">P</div>
+            <div class="dim-info">
+              <div class="dim-name">Politeness</div>
+              <div class="dim-sub">ความสุภาพ &amp; ภาษา</div>
+            </div>
+            <div class="dim-score" id="score-P">0%</div>
+          </div>
+
+          <div class="dim-pill" data-dim="S">
+            <div class="dim-letter" style="background:rgba(168,105,255,0.15);color:#c084fc">S</div>
+            <div class="dim-info">
+              <div class="dim-name">Response</div>
+              <div class="dim-sub">การตอบสนอง &amp; เจ้าของ</div>
+            </div>
+            <div class="dim-score" id="score-S">0%</div>
+          </div>
+
+          <div class="dim-pill" data-dim="C">
+            <div class="dim-letter" style="background:rgba(251,146,60,0.15);color:#fb923c">C</div>
+            <div class="dim-info">
+              <div class="dim-name">Cultural</div>
+              <div class="dim-sub">ความเข้าใจวัฒนธรรม</div>
+            </div>
+            <div class="dim-score" id="score-C">0%</div>
+          </div>
+
+          <div class="dim-pill" data-dim="H">
+            <div class="dim-letter" style="background:rgba(52,211,153,0.15);color:#34d399">H</div>
+            <div class="dim-info">
+              <div class="dim-name">Clear Comm.</div>
+              <div class="dim-sub">สื่อสารชัดเจน</div>
+            </div>
+            <div class="dim-score" id="score-H">0%</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="card" style="padding:1rem">
+        <div class="section-label" style="margin-bottom:0.75rem">Session Stats</div>
+        <div class="stats-row">
+          <div class="stat-box">
+            <div class="stat-value" id="statCompleted">0</div>
+            <div class="stat-label">Completed</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="statScore">&mdash;</div>
+            <div class="stat-label">Avg Score</div>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ════════════════ CENTER PANEL ════════════════ -->
+    <section class="center-panel">
+
+      <div class="scenario-header">
+        <div>
+          <div class="scenario-tag">
+            <span class="dot"></span>
+            <span id="scenarioNum">Scenario 1 of 20</span>
+          </div>
+          <h2 class="scenario-title" id="scenarioTitle" style="margin-top:6px">Understanding Guest Needs</h2>
+          <p style="color:var(--text-muted); font-size: 0.95rem; margin-top: 8px;">Watch the video clip and choose the
+            best answer.</p>
+        </div>
+      </div>
+
+      <div class="dialogue-box animate-in" id="dialogueBox">
+
+        <!-- ── VIDEO PLAYER ── -->
+        <div id="videoPlayerWrap" class="video-player-wrap" style="display:none">
+          <video id="scenarioVideo" preload="metadata" playsinline onclick="vcTogglePlay()"
+            style="cursor:pointer;"></video>
+          <div class="vc-bar">
+            <button class="vc-btn" id="vcPlay" title="Play / Pause" onclick="vcTogglePlay()">▶</button>
+            <button class="vc-btn" id="vcReplay" title="Replay from start" onclick="vcReplay()"
+              style="font-size:0.85rem">↺</button>
+            <input class="vc-seek" id="vcSeek" type="range" min="0" max="100" step="0.1" value="0"
+              oninput="vcSeek(this.value)" />
+            <span class="vc-time" id="vcTime">0:00 / 0:00</span>
+            <span class="vc-label">🔊</span>
+            <input class="vc-vol" id="vcVol" type="range" min="0" max="1" step="0.05" value="1"
+              oninput="vcVol(this.value)" />
+          </div>
+        </div>
+
+        <!-- ── NO-VIDEO PLACEHOLDER (shown when no video file assigned) ── -->
+        <div id="videoPlaceholder" class="video-placeholder">
+          <div class="vph-icon">🎬</div>
+          <div class="vph-text">Video will appear here — add an MP4 file for this scenario</div>
+        </div>
+
+      </div>
+
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.6rem;">
+        <div class="choices-label" style="margin-bottom:0;">What would you likely say?</div>
+        <button onclick="speakPrompt()" title="Listen to prompt" style="background:rgba(212,160,23,0.12);border:1px solid var(--border);color:var(--gold-400);cursor:pointer;font-size:0.8rem;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;transition:all 0.2s;font-family:'Inter',sans-serif;font-weight:600;" onmouseenter="this.style.background='rgba(212,160,23,0.25)'" onmouseleave="this.style.background='rgba(212,160,23,0.12)'">🔊 Listen</button>
+      </div>
+
+      <div class="choices-grid" id="choicesGrid">
+        <div class="choice-card choice-a" id="cardA" onclick="selectChoice('A')" role="button" tabindex="0">
+          <div class="choice-letter-badge">A</div>
+          <div class="choice-text" id="textA">
+            "Certainly. Could I have the name of the reservation? I'll check whether your friends have arrived."
+          </div>
+        </div>
+
+        <div class="choice-card choice-b" id="cardB" onclick="selectChoice('B')" role="button" tabindex="0">
+          <div class="choice-letter-badge">B</div>
+          <div class="choice-text" id="textB">
+            "Certainly. You're welcome to have a look around the restaurant and see if you can find them."
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;align-items:center;margin-top:1rem">
+        <button class="btn-next" id="btnNext" onclick="nextScenario()" disabled>
+          Next Scenario <span id="btnNextLabel">&#8594;</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ════════════════ RIGHT PANEL ════════════════ -->
+    <aside class="right-panel" id="rightPanel">
+
+      <div class="section-label">Feedback</div>
+
+      <div class="idle-prompt" id="idlePrompt">
+        <div class="idle-icon">&#127919;</div>
+        <div class="idle-text">Select a response card to see<br />feedback.</div>
+      </div>
+
+      <div id="feedbackContent" style="display:none;flex-direction:column;gap:1rem">
+        <div class="feedback-bubble" id="feedbackBubble">
+          <div class="feedback-icon">&#128161;</div>
+          <div class="feedback-heading">Feedback</div>
+          <div class="feedback-text" id="feedbackText"></div>
+        </div>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <script>
+    /* ─── Scenario Data ─────────────────────────────────────── */
+    /* To unlock a hidden scenario: remove its  hidden: true  line */
+    const scenarios = [
+
+      /* ── ACTIVE SCENARIOS (1–5) ─────────────────────────── */
+      {
+        num: 1,
+        title: "Understanding Guest Needs",
+        video: "videos/scenario01.mp4",
+        optionA: "\"Certainly. Could I have the name of the reservation? I'll check whether your friends have arrived.\"",
+        optionB: "\"Certainly. You're welcome to have a look around the restaurant and see if you can find them.\"",
+        scoresA: { U: 2, P: 1, S: 2, C: 'N/A', H: 1 },
+        scoresB: { U: 1, P: 1, S: 0, C: 'N/A', H: 0 },
+        feedback: 'Both responses are polite, but <span class="feedback-highlight">A</span> identifies the underlying need and actively helps solve it — demonstrating true guest ownership.',
+      },
+      {
+        num: 2,
+        title: "Waiting for Table",
+        video: "videos/scenario02.mp4",
+        optionA: "\"Your table isn't ready yet. You'll need to wait about ten minutes, please.\"",
+        optionB: "\"Your table should be ready in about ten minutes. Would you mind waiting just a little longer?\"",
+        scoresA: { U: 'N/A', P: 1, S: 'N/A', C: 'N/A', H: 1 },
+        scoresB: { U: 'N/A', P: 2, S: 'N/A', C: 'N/A', H: 1 },
+        feedback: "A isn't rude or grammatically wrong. B simply demonstrates the more sophisticated softening strategies taught in Module 5—vague language, modal expressions and would you mind. Module 5 explicitly develops these techniques to make service communication softer and more professional. ",
+      },
+      {
+        num: 3,
+        title: "Service Response & Ownership",
+        video: "videos/scenario03.mp4",
+        optionA: "\"I’m very sorry about the delay. The café is quite busy at the moment, but your coffee should arrive soon.\"",
+        optionB: "\"I’m very sorry about the delay. I’ll check on your order right away and let you know when it will be ready.\"",
+        scoresA: { U: 1, P: 1, S: 0, C: 'N/A', H: 1 },
+        scoresB: { U: 1, P: 1, S: 2, C: 'N/A', H: 1 },
+        feedback: 'Both employees understand. Both apologize. Both sound polite. But only B takes ownership. That distinction is well supported by Module 3, whose learning outcomes move from recognizing complaints to responding to them appropriately and effectively.',
+      },
+      {
+        num: 4,
+        title: "Cultural Sensitivity",
+        video: "videos/scenario04.mp4",
+        optionA: "I see. Is there something about the dish that isn't quite right for you?",
+        optionB: "I understand. Please let me know if there is a problem with the dish.",
+        scoresA: { U: 2, P: 1, S: 1, C: 2, H: 'N/A' },
+        scoresB: { U: 1, P: 1, S: 0, C: 0, H: 'N/A' },
+        feedback: 'This is particularly useful analytically.  B is perfectly polite. So somebody choosing B should not lose Politeness points.  But B waits for the guest to state the problem explicitly. A recognizes that an indirect comment may already be the complaint and gently explores it—the type of interpretation and response explicitly developed in Module 4. ',
+      },
+      {
+        num: 5,
+        title: "Clear & Helpful Communication Situation",
+        video: "videos/scenario05.mp4",
+        optionA: "Certainly. Go straight along this hallway, turn right at the café, and take the elevator to the second floor. Conference Room B will be on your left.",
+        optionB: "Certainly. Conference Room B is on the second floor. Just follow the signs near the elevator.",
+        scoresA: { U: 1, P: 1, S: 'N/A', C: 'N/A', H: 2 },
+        scoresB: { U: 1, P: 1, S: 'N/A', C: 'N/A', H: 1 },
+        feedback: "Again, B isn't wrong.  It gives the correct destination.  A is simply more helpful because it provides clear, step-by-step information. That's directly consistent with Module 2's direction-giving and clarification work.",
+      },
+
+      /* ── ACTIVE SCENARIOS (6–25) ── */
+      { num: 6, title: "Understanding Guest Needs", video: "videos/scenario06.mp4", optionA: "Certainly. Let me check where we can safely store your bags until you're ready to leave.", optionB: "Certainly. You can keep your bags with you and wait in the lobby until this evening.", scoresA: { U: 2, P: 1, S: 2, C: 'N/A', H: 1 }, scoresB: { U: 1, P: 1, S: 0, C: 'N/A', H: 0 }, feedback: 'Both understand that the guest has time before the flight, but A recognizes the actual need: somewhere to leave the luggage.' },
+      { num: 7, title: "Politeness & Professional Language", video: "videos/scenario07.mp4", optionA: "I'm sorry. We'll be closing shortly. Could I take your order when you're ready?", optionB: "I'm sorry. We're closing soon, so you'll need to order now, please.", scoresA: { U: 'N/A', P: 2, S: 'N/A', C: 'N/A', H: 1 }, scoresB: { U: 'N/A', P: 1, S: 'N/A', C: 'N/A', H: 1 }, feedback: "B isn't rude. It even contains please. But A uses the softer language characteristic of Module 5 and puts less pressure on the guest. Module 5 explicitly teaches modal softening and ways of reducing the force of requests" },
+      { num: 8, title: "Service Response & Ownership", video: "videos/scenario08.mp4", optionA: "The conference room is still open. You could go back and check your seat.", optionB: "Let me contact the conference team and see if anyone has found your phone.", scoresA: { U: 1, P: 0, S: 0, C: 'N/A', H: 1 }, scoresB: { U: 1, P: 1, S: 2, C: 'N/A', H: 1 }, feedback: 'A gives useful advice. B takes action. Neither response is absurd or grammatically wrong.' },
+      { num: 9, title: "Cultural Sensitivity", video: "videos/scenario09.mp4", optionA: "I understand. Let me see whether we have a quieter table available for you.", optionB: "Of course. If you'd like to change tables, please let me know.", scoresA: { U: 2, P: 1, S: 1, C: 2, H: 'N/A' }, scoresB: { U: 1, P: 1, S: 0, C: 1, H: 'N/A' }, feedback: 'B is courteous and actually recognizes the possibility of changing tables. But it still requires the guest to make the request more explicitly. A interprets the softened statement as a request and responds proactively—the kind of inference and adaptation emphasized in Module 4.' },
+      { num: 10, title: "Clear & Helpful Communication", video: "videos/scenario10.mp4", optionA: "Not far. It's over that way, near the other halls.", optionB: "It's about a five-minute walk. Go straight ahead and turn left after the café. The exhibition hall will be on your right.", scoresA: { U: 1, P: 0, S: 'N/A', C: 'N/A', H: 1 }, scoresB: { U: 1, P: 1, S: 'N/A', C: 'N/A', H: 2 }, feedback: "Again, A isn't incorrect. The behavioural distinction is: giving information versus giving information the guest can actually use. That fits Module 2 particularly well, where learners practice multi-step directions, landmarks, walking time, clarification and repetition." },
+      { num: 11, title: "Understanding + Service Ownership", video: "videos/scenario11.mp4", optionA: "I'm sorry about that. Let me check your order and ask the kitchen to prepare the correct dish for you.", optionB: "I'm sorry about that. This may be the wrong dish. Would you like me to check with the kitchen.", scoresA: { U: 2, P: 1, S: 2, C: 'N/A', H: 1 }, scoresB: { U: 1, P: 1, S: 1, C: 'N/A', H: 1 }, feedback: 'Both are polite. But A both understands the likely problem and takes action; B is more tentative and leaves the next step partly to the guest.' },
+      { num: 12, title: "Professional Language + Helpful Communication", video: "videos/scenario12.mp4", optionA: "It should be about fifteen minutes or so. You're welcome to wait in the lounge, and I'll let you know as soon as a table is available.", optionB: "Probably about fifteen minutes, but I can't tell you exactly. You can wait in the lounge if you want.", scoresA: { U: 'N/A', P: 2, S: 1, C: 'N/A', H: 2 }, scoresB: { U: 'N/A', P: 1, S: 0, C: 'N/A', H: 1 }, feedback: "This integrates Module 5's vague language with genuinely useful information. The module specifically teaches expressions such as about, shortly and should be able to to avoid over-promising while still serving the guest professionally." },
+      { num: 13, title: "Understanding + Cultural Sensitivity", video: "videos/scenario13.mp4", optionA: "Yes, we're very busy tonight. It should become quieter later.", optionB: "I understand. Would you prefer a table in a quieter area? Let me see what we have available.", scoresA: { U: 0, P: 1, S: 0, C: 0, H: 'N/A' }, scoresB: { U: 2, P: 1, S: 1, C: 2, H: 'N/A' }, feedback: "A responds correctly to the literal words.  B responds to the person.  The learner has to combine verbal language with contextual/non-verbal clues, which is very consistent with Module 4's emphasis on interpreting meaning through context rather than spoken words alone." },
+      { num: 14, title: "Service Ownership + Professional Language", video: "videos/scenario14.mp4", optionA: "I'm very sorry about that. I'll check the bill right away and have the extra charge removed if there's been a mistake.", optionB: "I'm sorry about that. There may be a mistake on the bill, so I'll ask the cashier to check it for you.", scoresA: { U: 1, P: 2, S: 2, C: 'N/A', H: 1 }, scoresB: { U: 1, P: 2, S: 1, C: 'N/A', H: 1 }, feedback: "Both are professional. Both take some action.  The difference is ownership: B → I'll ask somebody else to check. A → I'll check and move the problem toward resolution. That distinction is strongly grounded in Module 3's emphasis on recognizing complaints and responding appropriately and effectively. " },
+      { num: 15, title: "Helpful Communication + Cultural Sensitivity", video: "videos/scenario15.mp4", optionA: "Yes, that's right. The second floor. Just follow the signs from there.", optionB: "That's right. Would you like me to go over the directions once more, or show you where the elevator is?", scoresA: { U: 1, P: 1, S: 0, C: 1, H: 1 }, scoresB: { U: 1, P: 1, S: 1, C: 2, H: 2 }, feedback: "This one brings together two ideas from the course particularly nicely. Module 2 teaches learners to clarify and repeat directions when a guest has not fully understood them. Module 4 teaches them not to depend exclusively on explicit words but to interpret contextual signals.  The guest never says: 'I don't understand.'  The employee has to notice." },
+      { num: 16, title: "Delayed Food + Directions", video: "videos/scenario16.mp4", optionA: "I'm sorry about the delay. I'll check your order right away. Meeting Room A is on the second floor, just past the elevators.", optionB: "I'm sorry about the delay. Your food should arrive soon. Meeting Room A is upstairs—please follow the signs.", scoresA: { U: 2, P: 1, S: 2, C: 'N/A', H: 2 }, scoresB: { U: 2, P: 1, S: 1, C: 'N/A', H: 1 }, feedback: 'Both choices address both needs. The distinction is taking ownership + giving more usable information.' },
+      { num: 17, title: "Wrong Drink + Time Pressure", video: "videos/scenario17.mp4", optionA: "I'm very sorry. I'll have your iced tea prepared right away so you won't have to wait long.", optionB: "I'm very sorry. I'll ask the café staff about your iced tea. It shouldn't take very long.", scoresA: { U: 2, P: 1, S: 2, C: 'N/A', H: 1 }, scoresB: { U: 1, P: 1, S: 1, C: 'N/A', H: 1 }, feedback: "The second need isn't another request; it's urgency. A recognizes both wrong drink and limited time and acts accordingly." },
+      { num: 18, title: "Seating Preference + Elderly Parent", video: "videos/scenario18.mp4", optionA: "Of course. Let me see whether we have a quieter table that would be more comfortable for both of you.", optionB: "Of course. There are some tables near the back. You can choose one if you'd prefer somewhere quieter.", scoresA: { U: 2, P: 1, S: 2, C: 'N/A', H: 1 }, scoresB: { U: 1, P: 1, S: 1, C: 'N/A', H: 0 }, feedback: "This is sensitivity to an individual's needs, but not necessarily intercultural sensitivity. " },
+      { num: 19, title: "Indirect Concern + Directions", video: "videos/scenario19.mp4", optionA: "Yes, we're quite busy today. Hall 5 is on the other side of the building, just past the information desk.", optionB: "I understand. Would you prefer somewhere a little quieter? I can also show you the easiest way to Hall 5 when you're ready.", scoresA: { U: 1, P: 1, S: 0, C: 0, H: 1 }, scoresB: { U: 2, P: 1, S: 1, C: 2, H: 2 }, feedback: "A answers the explicit request for directions but treats “It seems rather busy here...” literally. B recognizes both the implied and explicit needs. That interpretation is grounded in Module 4's work on indirect requests and contextual meaning." },
+      { num: 20, title: "Reservation Problem + Special Occasion", video: "videos/scenario20.mp4", optionA: "I'm sorry about the mix-up. Let me check your reservation and see whether we can arrange a window table for you", optionB: "I'm sorry about that. Window tables are very popular, but I'll check whether one is available.", scoresA: { U: 2, P: 1, S: 2, C: 'N/A', H: 1 }, scoresB: { U: 1, P: 1, S: 1, C: 'N/A', H: 1 }, feedback: "A understands that this isn't merely: “I want a window table.”  There is also an existing reservation expectation and a special occasion, so A first checks what was promised and then seeks a solution." },
+      { num: 21, title: "Understanding + Politeness + Ownership", video: "videos/scenario21.mp4", optionA: "I'm very sorry about that. I'll ask the kitchen to heat it up for you. It shouldn't take too long", optionB: "I'm very sorry about that. Since you're in a hurry, let me check which option we can prepare most quickly for you.", scoresA: { U: 1, P: 2, S: 1, C: 'N/A', H: 1 }, scoresB: { U: 2, P: 2, S: 2, C: 'N/A', H: 1 }, feedback: "A solves the obvious problem—cold soup. B recognizes the underlying priority: time, and finds a solution around that need." },
+      { num: 22, title: "Understanding + Cultural Sensitivity + Ownership", video: "videos/scenario22.mp4", optionA: "Take your time. Please let me know when you've decided.", optionB: "Would you like me to recommend something? I can tell you which desserts are most popular.", scoresA: { U: 1, P: 1, S: 0, C: 1, H: 'N/A' }, scoresB: { U: 2, P: 1, S: 2, C: 2, H: 'N/A' }, feedback: 'This reflects the kind of indirect communication explicitly used in Module 5 itself, where the learner is expected to recognize that hesitation may signal a need for assistance rather than wait for a direct request. ' },
+      { num: 23, title: "Politeness + Ownership + Helpful Communication", video: "videos/scenario23.mp4", optionA: "It may be running a little late. You're welcome to wait here for a few more minutes.", optionB: "It may be running a little late. Let me check the pick-up area for you and see if I can find out when it will arrive.", scoresA: { U: 1, P: 2, S: 0, C: 'N/A', H: 1 }, scoresB: { U: 1, P: 2, S: 2, C: 'N/A', H: 2 }, feedback: 'This gives another useful distinction: reassuring the guest versus reassuring + taking useful action.  Both use appropriately softened language.' },
+      { num: 24, title: "Understanding + Cultural Sensitivity + Helpful Communication", video: "videos/scenario24.mp4", optionA: "Great. Just follow the directions I gave you and you'll get there.", optionB: "Of course. Would it help if I showed you the route on the map before you go?", scoresA: { U: 1, P: 1, S: 0, C: 1, H: 1 }, scoresB: { U: 2, P: 1, S: 1, C: 2, H: 2 }, feedback: 'This is a lovely integration of Modules 2 and 4.  Module 2 teaches clarification and checking understanding rather than simply assuming the message has been understood. Module 4 adds the importance of interpreting contextual cues rather than depending only on explicit words. ' },
+      { num: 25, title: "The Final Service Excellence Decision", video: "videos/scenario25.mp4", optionA: "You're very welcome. I'm glad you enjoyed the event, and I'm sorry the meeting rooms were difficult to find.", optionB: "You're very welcome. I'm glad you enjoyed the event, and thank you for telling us about the directions. I'll share your comment with our team so we can make them clearer for future guests.", scoresA: { U: 2, P: 2, S: 1, C: 'N/A', H: 1 }, scoresB: { U: 2, P: 2, S: 2, C: 'N/A', H: 2 }, feedback: "The guest is not complaining anymore.  There is nothing the employee has to fix for this particular guest. Both responses are warm and professional. But B does something characteristic of Service Excellence: It turns guest feedback into future improvement.That is a beautiful way to end the game." },
+    ];
+
+    /* Only play scenarios that are NOT hidden — remove hidden:true to unlock */
+    const activeScenarios = scenarios.filter(s => !s.hidden);
+    const TOTAL_QUESTIONS = activeScenarios.length;  /* currently 5 */
+
+    /* ─── State ─────────────────────────────────────────────── */
+    const dims = ['U', 'P', 'S', 'C', 'H'];
+    const dimColors = { U: '#d4a017', P: '#4ab0b0', S: '#c084fc', C: '#fb923c', H: '#34d399' };
+    let currentIdx = 0;
+    let selectedChoice = null;
+    let totalScores = { U: 0, P: 0, S: 0, C: 0, H: 0 };
+    let totalMax = { U: 37, P: 32, S: 35, C: 14, H: 30 };
+    let completedCount = 0;
+    let displayScores = { U: 0, P: 0, S: 0, C: 0, H: 0 };
+    let animFrame = null;
+
+    function getStars(pct) {
+      if (pct >= 90) return '★★★★★';
+      if (pct >= 80) return '★★★★☆';
+      if (pct >= 70) return '★★★☆☆';
+      if (pct >= 60) return '★★☆☆☆';
+      return '★☆☆☆☆';
+    }
+
+    /* ─── Video Player Controls ────────────────────────────── */
+    const vid = document.getElementById('scenarioVideo');
+
+    function vcFmt(s) {
+      if (!isFinite(s)) return '0:00';
+      const m = Math.floor(s / 60);
+      const sec = Math.floor(s % 60).toString().padStart(2, '0');
+      return `${m}:${sec}`;
+    }
+
+    function vcUpdateTime() {
+      const pct = vid.duration ? (vid.currentTime / vid.duration) * 100 : 0;
+      document.getElementById('vcSeek').value = pct;
+      document.getElementById('vcTime').textContent = `${vcFmt(vid.currentTime)} / ${vcFmt(vid.duration)}`;
+    }
+
+    function vcTogglePlay() {
+      if (vid.paused) { vid.play(); }
+      else { vid.pause(); }
+    }
+
+    function vcReplay() {
+      vid.currentTime = 0;
+      vid.play();
+    }
+
+    function vcSeek(val) {
+      if (vid.duration) vid.currentTime = (val / 100) * vid.duration;
+    }
+
+    function vcVol(val) {
+      vid.volume = val;
+    }
+
+    vid.addEventListener('play', () => { document.getElementById('vcPlay').textContent = '⏸'; });
+    vid.addEventListener('pause', () => { document.getElementById('vcPlay').textContent = '▶'; });
+    let hasSpokenPrompt = false;
+
+    function getBestFemaleVoice() {
+      const voices = (speechSynthesis.getVoices().length > 0 ? speechSynthesis.getVoices() : systemVoices);
+      if (!voices || voices.length === 0) return null;
+
+      const enVoices = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith('en'));
+      const pool = enVoices.length > 0 ? enVoices : voices;
+
+      const maleNames = ['david', 'mark', 'daniel', 'george', 'arthur', 'james', 'guy', 'christopher', 'eric', 'stefan', 'ryan', 'richard', 'paul', 'alex', 'fred', 'oliver', 'tom', 'aaron', 'gordon', 'male'];
+
+      // Priority 1: High quality known female neural / natural voices
+      const priorityFemale = ['jenny', 'aria', 'zira', 'samantha', 'victoria', 'karen', 'hazel', 'google uk english female', 'google us english'];
+      for (const name of priorityFemale) {
+        const found = pool.find(v => {
+          const n = v.name.toLowerCase();
+          return !maleNames.some(m => n.includes(m)) && n.includes(name);
+        });
+        if (found) return found;
+      }
+
+      // Priority 2: Other female voices
+      const otherFemale = ['female', 'woman', 'susan', 'serena', 'ava', 'allison', 'stephanie', 'fiona', 'moira', 'tessa', 'veena', 'heera', 'linda', 'catherine', 'zoe', 'nicky', 'cortana'];
+      for (const name of otherFemale) {
+        const found = pool.find(v => {
+          const n = v.name.toLowerCase();
+          return !maleNames.some(m => n.includes(m)) && n.includes(name);
+        });
+        if (found) return found;
+      }
+
+      // Priority 3: Any non-male English voice
+      const nonMale = pool.find(v => !maleNames.some(m => v.name.toLowerCase().includes(m)));
+      if (nonMale) return nonMale;
+
+      return pool[0] || null;
+    }
+
+    function speakPrompt() {
+      if (!('speechSynthesis' in window)) return;
+      speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance("What would you likely say?");
+      utterance.rate = 0.92;
+      utterance.pitch = 1.25;
+
+      const femaleVoice = getBestFemaleVoice();
+      if (femaleVoice) {
+        utterance.voice = femaleVoice;
+        utterance.pitch = 1.15;
+      }
+
+      speechSynthesis.speak(utterance);
+    }
+
+    vid.addEventListener('ended', () => {
+      document.getElementById('vcPlay').textContent = '▶';
+      if (!hasSpokenPrompt) {
+        hasSpokenPrompt = true;
+        speakPrompt();
+      }
+    });
+    // Robust Stall Monitor for freezing MP4s
+    let vidStallMonitor = null;
+    let vidLastTime = -1;
+    let vidStallCount = 0;
+
+    function startStallMonitor() {
+      if (vidStallMonitor) clearInterval(vidStallMonitor);
+      vidLastTime = -1;
+      vidStallCount = 0;
+      vidStallMonitor = setInterval(() => {
+        if (!vid.paused && vid.readyState >= 2) {
+          if (vid.currentTime === vidLastTime) {
+            vidStallCount++;
+            // If stalled for 800ms, assume frozen at end
+            if (vidStallCount >= 8 && vid.currentTime > 0) {
+              if (!hasSpokenPrompt) {
+                vid.pause();
+                vid.dispatchEvent(new Event('ended'));
+              }
+            }
+          } else {
+            vidStallCount = 0;
+            vidLastTime = vid.currentTime;
+          }
+        }
+      }, 100);
+    }
+
+    vid.addEventListener('timeupdate', () => {
+      vcUpdateTime();
+    });
+    vid.addEventListener('loadedmetadata', vcUpdateTime);
+
+    /* If the video file is missing or fails to load → show placeholder instead */
+    let videoLoading = false;
+    vid.addEventListener('error', (e) => {
+      if (!videoLoading || !vid.src) return;
+      console.warn('Video failed to load:', vid.src, vid.error);
+      if (vid.error && (vid.error.code === 4 || vid.error.code === 3)) {
+        document.getElementById('videoPlayerWrap').style.display = 'none';
+        document.getElementById('videoPlaceholder').style.display = 'flex';
+      }
+    });
+
+    /* Load video for a scenario — shows player if path set, placeholder otherwise */
+    function loadVideoForScenario(s) {
+      hasSpokenPrompt = false;
+      const wrap = document.getElementById('videoPlayerWrap');
+      const ph = document.getElementById('videoPlaceholder');
+
+      videoLoading = false;
+      vid.pause();
+      document.getElementById('vcPlay').textContent = '▶';
+      document.getElementById('vcSeek').value = 0;
+      document.getElementById('vcTime').textContent = '0:00 / 0:00';
+
+      if (s.video) {
+        videoLoading = true;
+        wrap.style.display = 'block';
+        ph.style.display = 'none';
+
+        if (vid.getAttribute('src') !== s.video) {
+          vid.src = s.video;
+          vid.load();
+        } else {
+          vid.currentTime = 0;
+        }
+
+        const p = vid.play();
+        if (p && p.catch) {
+          p.catch(e => {
+            console.log('Autoplay deferred (click Play to start video):', e);
+            document.getElementById('vcPlay').textContent = '▶';
+          });
+        }
+      } else {
+        videoLoading = false;
+        vid.src = '';
+        wrap.style.display = 'none';
+        ph.style.display = 'flex';
+      }
+    }
+
+    /* ─── Radar Draw ────────────────────────────────────────── */
+    function drawRadar(scores) {
+      const canvas = document.getElementById('radarCanvas');
+      const ctx = canvas.getContext('2d');
+      const W = canvas.width, H = canvas.height;
+      const cx = W / 2, cy = H / 2;
+      const r = Math.min(W, H) / 2 - 32;
+      const n = 5;
+      ctx.clearRect(0, 0, W, H);
+
+      const rings = [0.2, 0.4, 0.6, 0.8, 1.0];
+      const pctLbls = ['20%', '40%', '60%', '80%', ''];
+      rings.forEach((ring, ri) => {
+        ctx.beginPath();
+        for (let i = 0; i < n; i++) {
+          const a = (Math.PI * 2 * i / n) - Math.PI / 2;
+          const x = cx + Math.cos(a) * r * ring;
+          const y = cy + Math.sin(a) * r * ring;
+          i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.strokeStyle = ri === 4 ? 'rgba(212,160,23,0.35)' : 'rgba(255,255,255,0.07)';
+        ctx.lineWidth = ri === 4 ? 1.5 : 1;
+        ctx.stroke();
+        ctx.fillStyle = 'rgba(255,255,255,0.012)';
+        ctx.fill();
+        if (pctLbls[ri]) {
+          ctx.fillStyle = 'rgba(255,255,255,0.18)';
+          ctx.font = '7.5px Inter';
+          ctx.textAlign = 'center';
+          ctx.fillText(pctLbls[ri], cx + 2, cy - r * ring - 3);
+        }
+      });
+
+      for (let i = 0; i < n; i++) {
+        const a = (Math.PI * 2 * i / n) - Math.PI / 2;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(cx + Math.cos(a) * r, cy + Math.sin(a) * r);
+        ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+
+      const vals = dims.map(d => (typeof scores[d] === 'number' ? scores[d] : 0) / 100);
+      ctx.beginPath();
+      for (let i = 0; i < n; i++) {
+        const a = (Math.PI * 2 * i / n) - Math.PI / 2;
+        const x = cx + Math.cos(a) * r * vals[i];
+        const y = cy + Math.sin(a) * r * vals[i];
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      const gr = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+      gr.addColorStop(0, 'rgba(212,160,23,0.4)');
+      gr.addColorStop(1, 'rgba(26,102,102,0.2)');
+      ctx.fillStyle = gr;
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(212,160,23,0.85)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      for (let i = 0; i < n; i++) {
+        const a = (Math.PI * 2 * i / n) - Math.PI / 2;
+        const x = cx + Math.cos(a) * r * vals[i];
+        const y = cy + Math.sin(a) * r * vals[i];
+        ctx.beginPath();
+        ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = '#e8b830';
+        ctx.fill();
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      }
+
+      const labelOff = 22;
+      dims.forEach((dim, i) => {
+        const a = (Math.PI * 2 * i / n) - Math.PI / 2;
+        const lx = cx + Math.cos(a) * (r + labelOff);
+        const ly = cy + Math.sin(a) * (r + labelOff);
+        ctx.font = 'bold 11px Inter';
+        ctx.fillStyle = dimColors[dim];
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(dim, lx, ly);
+      });
+    }
+
+    function animateRadar(target) {
+      if (animFrame) cancelAnimationFrame(animFrame);
+      const start = { ...displayScores };
+      const t0 = performance.now();
+      const dur = 700;
+      function step(t) {
+        const p = Math.min((t - t0) / dur, 1);
+        const e = 1 - Math.pow(1 - p, 3);
+        dims.forEach(d => { displayScores[d] = start[d] + (target[d] - start[d]) * e; });
+        drawRadar(displayScores);
+        if (p < 1) animFrame = requestAnimationFrame(step);
+      }
+      animFrame = requestAnimationFrame(step);
+    }
+
+    /* ─── Load Scenario ─────────────────────────────────────── */
+    function loadScenario(idx) {
+      const s = activeScenarios[idx];
+      selectedChoice = null;
+
+      document.getElementById('scenarioNum').textContent = `Scenario ${s.num} of ${TOTAL_QUESTIONS}`;
+      document.getElementById('scenarioTitle').textContent = s.title;
+      document.getElementById('textA').textContent = s.optionA;
+      document.getElementById('textB').textContent = s.optionB;
+
+      ['A', 'B'].forEach(c => {
+        const card = document.getElementById(`card${c}`);
+        card.className = `choice-card choice-${c.toLowerCase()}`;
+        card.style.pointerEvents = '';
+      });
+
+      document.getElementById('btnNext').disabled = true;
+
+      // Update button label: last question shows "Finish" instead of "Next Scenario"
+      const isLast = idx === activeScenarios.length - 1;
+      document.getElementById('btnNext').querySelector('#btnNextLabel').textContent = isLast ? '✓ Finish' : '→';
+      document.getElementById('btnNext').firstChild.textContent = isLast ? 'Finish Session ' : 'Next Scenario ';
+
+      document.getElementById('idlePrompt').style.display = '';
+      document.getElementById('feedbackContent').style.display = 'none';
+      document.getElementById('feedbackBubble').classList.remove('revealed');
+
+
+      const dlg = document.getElementById('dialogueBox');
+      dlg.classList.remove('animate-in');
+      void dlg.offsetWidth;
+      dlg.classList.add('animate-in');
+
+      // Load (or reset) the video for this scenario
+      loadVideoForScenario(s);
+    }
+
+    /* ─── Select Choice ─────────────────────────────────────── */
+    function selectChoice(choice) {
+      try {
+        if (selectedChoice) return;
+        selectedChoice = choice;
+        const s = activeScenarios[currentIdx];
+        const scores = choice === 'A' ? s.scoresA : s.scoresB;
+
+        ['A', 'B'].forEach(c => {
+          const card = document.getElementById(`card${c}`);
+          if (card) card.style.pointerEvents = 'none';
+          if (c === choice) {
+            if (card) card.className = `choice-card choice-${c.toLowerCase()} selected-correct`;
+          } else {
+            if (card) card.className = `choice-card choice-${c.toLowerCase()} dimmed`;
+          }
+        });
+
+        const idle = document.getElementById('idlePrompt');
+        if (idle) idle.style.display = 'none';
+        const fc = document.getElementById('feedbackContent');
+        if (fc) fc.style.display = 'flex';
+
+        setTimeout(() => {
+          const ftext = document.getElementById('feedbackText');
+          if (ftext) ftext.innerHTML = s.feedback;
+          const fbubble = document.getElementById('feedbackBubble');
+          if (fbubble) fbubble.classList.add('revealed');
+        }, 750);
+
+
+
+        dims.forEach(d => {
+          const v = scores[d];
+          if (typeof v === 'number') { totalScores[d] += v; }
+        });
+
+        completedCount++;
+
+        const btn = document.getElementById('btnNext');
+        if (btn) btn.disabled = false;
+      } catch (err) {
+        alert("Error in selectChoice: " + err.message);
+      }
+    }
+
+    /* ─── Next Scenario ─────────────────────────────────────── */
+    function nextScenario() {
+      if (currentIdx >= activeScenarios.length - 1) {
+        showCompletion();
+        return;
+      }
+      currentIdx++;
+      loadScenario(currentIdx);
+    }
+
+    /* ─── Session Complete Screen ────────────────────────────── */
+    function showCompletion() {
+      try {
+        // Cleanup media before replacing the DOM to prevent browser freezes
+        try {
+          if (vid) {
+            vid.pause();
+            vid.removeAttribute('src');
+            vid.load();
+          }
+          speechSynthesis.cancel();
+        } catch (e) { }
+
+        const vals = dims.filter(d => totalMax[d] > 0).map(d => Math.min(100, Math.round((totalScores[d] / totalMax[d]) * 100)));
+        const avg = vals.length ? Math.round(vals.reduce((a, b) => a + b, 0) / vals.length) : 0;
+
+        const dimNames = { U: 'Understanding Guest Needs', P: 'Politeness & Professional Language', S: 'Service Response & Ownership', C: 'Cultural Sensitivity', H: 'Clear & Helpful Communication' };
+
+        let profileTitle = '';
+        let profileStars = '';
+        let profileDesc = '';
+
+        if (avg >= 90) {
+          profileTitle = 'Highly Developed Service Excellence Profile';
+          profileStars = '★★★★★';
+          profileDesc = 'Your overall profile shows consistently strong service decision-making across the five dimensions. You demonstrate a high level of awareness of guest needs, professional communication, and effective service responses.';
+        } else if (avg >= 80) {
+          profileTitle = 'Strong Service Excellence Profile';
+          profileStars = '★★★★☆';
+          profileDesc = 'Your overall profile shows strong hospitality service awareness across most dimensions. You demonstrate many effective service behaviors, with opportunities to refine particular areas further.';
+        } else if (avg >= 70) {
+          profileTitle = 'Developing Service Excellence Profile';
+          profileStars = '★★★☆☆';
+          profileDesc = 'Your overall profile shows a solid foundation in hospitality service communication. You demonstrate several effective service behaviors and can strengthen your performance further through focused practice.';
+        } else if (avg >= 60) {
+          profileTitle = 'Growing Service Excellence Profile';
+          profileStars = '★★☆☆☆';
+          profileDesc = 'Your responses show an emerging foundation in effective hospitality service. Focusing on specific service behaviors can help you become more confident, proactive, and responsive to guest needs.';
+        } else {
+          profileTitle = 'Building Your Service Excellence Profile';
+          profileStars = '★☆☆☆☆';
+          profileDesc = 'You are developing the skills needed for effective hospitality service. Focused practice in the areas identified in your profile can help you respond to guests more effectively and confidently.';
+        }
+
+        let maxD = dims[0];
+        let maxPct = -1;
+        let minD = dims[0];
+        let minPct = 101;
+        dims.forEach(d => {
+          const pct = totalMax[d] > 0 ? Math.min(100, Math.round((totalScores[d] / totalMax[d]) * 100)) : 0;
+          if (pct > maxPct) {
+            maxPct = pct;
+            maxD = d;
+          }
+          if (pct < minPct) {
+            minPct = pct;
+            minD = d;
+          }
+        });
+        const strongestDesc = {
+          U: { title: "Your strongest area: Understanding Guest Needs", text: "You show a strong ability to recognize what guests really need. Your responses suggest that you can look beyond the immediate words and consider the guest's underlying purpose, concern, or priority." },
+          P: { title: "Your strongest area: Politeness & Professional Language", text: "You communicate with guests politely and professionally. Your responses show strong awareness of respectful, appropriately softened language that helps create a positive service experience." },
+          S: { title: "Your strongest area: Service Response & Ownership", text: "You show a strong tendency to take ownership of guest concerns. Rather than only explaining a situation, you are prepared to take action, follow up, and help move problems toward resolution." },
+          C: { title: "Your strongest area: Cultural Sensitivity", text: "You show strong awareness of indirect and contextual communication. Your responses suggest that you pay attention not only to what guests say, but also to tone, hesitation, body language, and other cues that may reveal their intended meaning." },
+          H: { title: "Your strongest area: Clear & Helpful Communication", text: "You provide information that is clear and genuinely useful. Your responses suggest that you consider the practical details guests need in order to understand what to do next and act confidently." }
+        };
+        const maxInfo = strongestDesc[maxD];
+
+        const weakestDesc = {
+          U: { title: "Your development priority: Understanding Guest Needs", text: "Try looking beyond the guest's immediate words and asking yourself, “What does this guest actually need?” Paying closer attention to the guest's situation, priorities, and implied concerns can help you provide more responsive service." },
+          P: { title: "Your development priority: Politeness & Professional Language", text: "Focus on how necessary information can be expressed more positively and professionally. Using softer wording, polite modal expressions, and guest-centered requests can help reduce pressure and create a more positive interaction." },
+          S: { title: "Your development priority: Service Response & Ownership", text: "Try moving beyond explanation or reassurance toward taking clear action. Ask yourself, “What can I do for this guest now?” Checking, following up, contacting the appropriate person, or offering a solution can demonstrate stronger service ownership." },
+          C: { title: "Your development priority: Cultural Sensitivity", text: "Try not to rely only on the literal meaning of a guest's words. Pay attention to tone, hesitation, facial expression, gaze, body language, and situational context, as these may reveal needs or concerns that are not directly expressed." },
+          H: { title: "Your development priority: Clear & Helpful Communication", text: "Focus on giving information that the guest can actually use. Where appropriate, provide practical details such as steps, landmarks, timing, clarification, or a clear next action rather than only general information." }
+        };
+        const minInfo = weakestDesc[minD];
+
+        document.querySelector('main').innerHTML = `
+          <div style="grid-column:1/-1;display:flex;align-items:center;justify-content:center;min-height:100%;background:var(--teal-900);padding:2rem;">
+            <div style="text-align:center;max-width:900px;width:100%;">
+              <div style="font-size:4rem;margin-bottom:1rem;">🏆</div>
+              <h2 style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--gold-400);margin-bottom:0.5rem;">Session Complete!</h2>
+              <p style="color:var(--text-muted);font-size:0.95rem;margin-bottom:2.5rem;">You've completed all ${TOTAL_QUESTIONS} scenarios. Here's your full performance summary.</p>
+
+            <div style="display:flex; flex-direction:row; align-items:center; justify-content:center; gap:3rem; margin-bottom:2.5rem; flex-wrap:wrap;">
+              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:2rem;">
+                <canvas id="radarCanvas" width="280" height="280" style="display:block;margin:0 auto;"></canvas>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;text-align:left;">
+                ${dims.map(d => {
+          const pct = totalMax[d] > 0 ? Math.min(100, Math.round((totalScores[d] / totalMax[d]) * 100)) : 0;
+          const stars = getStars(pct);
+          return `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:1.2rem;min-width:180px;">
+                                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                                      <div style="font-size:1.5rem; font-weight:900; color:${dimColors[d]}">${d}</div>
+                                      <div style="font-size:0.85rem;font-weight:700;color:${dimColors[d]};line-height:1.2;">${dimNames[d]}</div>
+                                      <div style="margin-left:auto; font-size:1.2rem; font-weight:800; color:${dimColors[d]}">${pct}%</div>
+                                    </div>
+                                    <div style="font-size:0.85rem; color:var(--gold-400); margin-bottom:8px;">${stars}</div>
+                                    <div style="width:100%;height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden;">
+                                      <div style="width:${pct}%;height:100%;background:${dimColors[d]};border-radius:4px;"></div>
+                                    </div>
+                                  </div>`;
+        }).join('')}
+              </div>
+            </div>
+
+            <div style="background:var(--surface2);border:1px solid var(--border2);border-radius:16px;padding:2rem;margin-bottom:2rem;max-width:600px;margin-left:auto;margin-right:auto;">
+              <div style="font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem;">Overall Average Score</div>
+              <div style="font-size:3rem;font-weight:800;color:var(--gold-300);line-height:1;">${avg}% <span style="font-size:1.5rem;color:var(--gold-400);vertical-align:middle;margin-left:8px;">${profileStars}</span></div>
+              <div style="font-size:0.8rem;color:var(--text-muted);margin-top:0.5rem;">Across ${completedCount} completed scenarios</div>
+              
+              <hr style="border:none;border-top:1px solid var(--border);margin:1.5rem 0;">
+              
+              <div style="font-size:1.2rem;font-weight:800;color:var(--gold-100);margin-bottom:0.5rem;">${profileTitle}</div>
+              <div style="font-size:0.95rem;color:var(--text-muted);line-height:1.5;text-align:left;">${profileDesc}</div>
+              
+              <hr style="border:none;border-top:1px solid var(--border);margin:1.5rem 0;">
+              
+              <div style="font-size:1.1rem;font-weight:800;color:${dimColors[maxD]};margin-bottom:0.5rem;">${maxInfo.title}</div>
+              <div style="font-size:0.95rem;color:var(--text-muted);line-height:1.5;text-align:left;">${maxInfo.text}</div>
+
+              <hr style="border:none;border-top:1px solid var(--border);margin:1.5rem 0;">
+              
+              <div style="font-size:1.1rem;font-weight:800;color:${dimColors[minD]};margin-bottom:0.5rem;">${minInfo.title}</div>
+              <div style="font-size:0.95rem;color:var(--text-muted);line-height:1.5;text-align:left;">${minInfo.text}</div>
+            </div>
+
+            <button onclick="location.reload()" style="background:linear-gradient(135deg,var(--gold-500),var(--gold-400));color:var(--teal-900);border:none;border-radius:10px;padding:14px 36px;font-size:1rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;box-shadow:0 4px 20px rgba(212,160,23,0.35);">↺ Restart Training</button>
+          </div>
+        </div>`;
+
+        // Animate radar after the canvas has been inserted into the DOM
+        const radarTarget = {};
+        dims.forEach(d => { radarTarget[d] = totalMax[d] > 0 ? Math.min(100, Math.round((totalScores[d] / totalMax[d]) * 100)) : 0; });
+        animateRadar(radarTarget);
+
+      } catch (err) {
+        alert("Error in showCompletion: " + err.message);
+      }
+    }
+
+    /* ─── Keyboard ──────────────────────────────────────────── */
+    document.addEventListener('keydown', e => {
+      if (!selectedChoice) {
+        if (e.key === 'a' || e.key === 'A') selectChoice('A');
+        if (e.key === 'b' || e.key === 'B') selectChoice('B');
+      }
+      if (e.key === 'Enter' && !document.getElementById('btnNext').disabled) nextScenario();
+    });
+
+    /* ─── Init ──────────────────────────────────────────────── */
+    let systemVoices = [];
+    function loadVoices() {
+      if ('speechSynthesis' in window) {
+        systemVoices = speechSynthesis.getVoices();
+      }
+    }
+    if ('speechSynthesis' in window && speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = loadVoices;
+    }
+    loadVoices();
+
+    function startTraining() {
+      loadVoices();
+      const screen = document.getElementById('startScreen');
+      screen.style.opacity = '0';
+      setTimeout(() => {
+        screen.style.display = 'none';
+        loadScenario(0);
+      }, 400);
+    }
+  </script>
+</body>
+
+</html>
