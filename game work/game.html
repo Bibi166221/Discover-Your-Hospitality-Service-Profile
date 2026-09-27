@@ -1093,278 +1093,208 @@
       flex-shrink: 0;
     }
 
-    /* ─── Mobile Tab Bar ───────────────────────────────────── */
-    .mobile-tab-bar {
-      display: none;
-      background: var(--teal-800);
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 60px;
-      z-index: 99;
-    }
-
-    .mobile-tabs {
-      display: flex;
-      width: 100%;
-    }
-
-    .mobile-tab {
-      flex: 1;
-      padding: 10px 6px;
-      background: none;
-      border: none;
-      border-bottom: 3px solid transparent;
-      color: var(--text-muted);
-      font-size: 0.75rem;
-      font-weight: 600;
-      font-family: 'Inter', sans-serif;
-      cursor: pointer;
-      transition: color var(--transition), border-color var(--transition);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3px;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .mobile-tab .tab-icon {
-      font-size: 1.1rem;
-    }
-
-    .mobile-tab.active {
-      color: var(--gold-300);
-      border-bottom-color: var(--gold-400);
-    }
-
-    /* ─── Mobile Panel Visibility ──────────────────────────── */
-    .mobile-panel {
+    /* ─── Mobile Feedback Box (Hidden on desktop) ───────────── */
+    .mobile-feedback-container {
       display: none;
     }
 
-    /* ─── Responsive Breakpoints ───────────────────────────── */
+    /* ─── Responsive Breakpoints (Mobile Only) ───────────────── */
     @media (max-width: 768px) {
       html {
         font-size: 15px;
       }
 
       .mobile-tab-bar {
-        display: block;
+        display: none !important;
       }
 
       main {
-        display: block;
-        height: auto;
-        overflow: visible;
-      }
-
-      /* Hide all panels by default on mobile */
-      .sidebar,
-      .center-panel,
-      .right-panel {
-        display: none !important;
-        height: auto;
-        min-height: calc(100dvh - 115px);
-        overflow-y: auto;
-      }
-
-      /* Show only the active tab panel */
-      .sidebar.mobile-active,
-      .center-panel.mobile-active,
-      .right-panel.mobile-active {
-        display: flex !important;
-      }
-
-      .center-panel {
-        padding: 1rem;
-        gap: 1rem;
+        display: block !important;
+        height: auto !important;
+        overflow: visible !important;
       }
 
       .sidebar {
-        padding: 1rem;
-        border-right: none;
-        border-bottom: 1px solid var(--border);
+        display: none !important;
       }
 
       .right-panel {
-        padding: 1rem;
-        border-left: none;
-        border-top: 1px solid var(--border);
+        display: none !important;
+      }
+
+      .center-panel {
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 0.75rem 0.85rem !important;
+        gap: 0.75rem !important;
+        height: auto !important;
+        min-height: calc(100dvh - 60px) !important;
+        overflow-y: visible !important;
       }
 
       /* Start screen: single column */
       #startScreen > div {
         grid-template-columns: 1fr !important;
-        gap: 1.5rem !important;
+        gap: 1.25rem !important;
         padding: 1.25rem !important;
         max-height: 90dvh;
         overflow-y: auto;
       }
 
       #startScreen > div > div:first-child img {
-        max-width: 200px !important;
+        max-width: 190px !important;
       }
 
       #startScreen h1 {
-        font-size: 1.5rem !important;
+        font-size: 1.45rem !important;
       }
 
       /* Scenario header */
       .scenario-header {
         flex-direction: column;
         align-items: flex-start;
-        gap: 6px;
+        gap: 4px;
       }
 
       .scenario-title {
         font-size: 1.15rem;
       }
 
-      /* Choice cards: single column on small screens */
+      /* Video: prominent and full-width on phone */
+      .dialogue-box {
+        padding: 0.4rem !important;
+        border-radius: var(--radius-md) !important;
+      }
+
+      .video-player-wrap {
+        margin-bottom: 0 !important;
+        border-radius: var(--radius-sm) !important;
+      }
+
+      .video-player-wrap video {
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        max-height: 50vh !important;
+        aspect-ratio: 16 / 9;
+        object-fit: contain !important;
+      }
+
+      /* Choice cards: stacked full-width for touch */
       .choices-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
+        gap: 0.65rem !important;
       }
 
       .choice-card {
-        padding: 1rem;
+        padding: 0.85rem 1rem !important;
       }
 
-      /* Bigger touch targets for choice cards */
       .choice-card:active {
         transform: scale(0.98);
       }
 
-      /* Video controls: hide volume on mobile (use system volume) */
+      /* Mobile Feedback: shown ONLY after answering the question on mobile */
+      .mobile-feedback-container {
+        display: none;
+        margin-top: 0.25rem;
+      }
+
+      .mobile-feedback-container.show-feedback {
+        display: block !important;
+        animation: fadeIn 0.35s ease forwards;
+      }
+
+      .mobile-feedback-container .feedback-bubble {
+        opacity: 1 !important;
+        transform: none !important;
+        padding: 0.8rem 1rem !important;
+        border-radius: var(--radius-md) !important;
+        background: var(--surface2) !important;
+        border: 1px solid var(--gold-400) !important;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4) !important;
+      }
+
+      .mobile-feedback-container .feedback-icon {
+        font-size: 1.25rem !important;
+        margin-bottom: 4px !important;
+      }
+
+      .mobile-feedback-container .feedback-heading {
+        font-size: 0.72rem !important;
+        font-weight: 700 !important;
+        color: var(--gold-300) !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.08em !important;
+        margin-bottom: 4px !important;
+      }
+
+      .mobile-feedback-container .feedback-text {
+        font-size: 0.84rem !important;
+        line-height: 1.55 !important;
+        color: var(--text-primary) !important;
+      }
+
+      /* Video controls */
       .vc-vol,
       .vc-label {
-        display: none;
+        display: none !important;
       }
 
       .vc-bar {
-        padding: 10px 12px;
-        gap: 12px;
+        padding: 8px 10px !important;
+        gap: 10px !important;
       }
 
       .vc-btn {
-        font-size: 1.2rem;
-        padding: 4px 8px;
-        min-width: 36px;
-        min-height: 36px;
+        font-size: 1.1rem !important;
+        padding: 4px 6px !important;
+        min-width: 34px !important;
+        min-height: 34px !important;
       }
 
       .vc-seek {
-        height: 6px;
+        height: 6px !important;
       }
 
       .vc-seek::-webkit-slider-thumb {
-        width: 18px;
-        height: 18px;
+        width: 16px !important;
+        height: 16px !important;
       }
 
       /* Next button: full width on mobile */
       .btn-next {
-        width: 100%;
-        justify-content: center;
-        padding: 14px 24px;
-        font-size: 1rem;
-      }
-
-      /* Radar canvas: shrink for mobile */
-      #radarCanvas {
-        width: 180px !important;
-        height: 180px !important;
-      }
-
-      /* Dialogue box */
-      .dialogue-box {
-        padding: 1rem;
-      }
-
-      .dialogue-text {
-        font-size: 0.9rem;
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 13px 20px !important;
+        font-size: 0.98rem !important;
+        margin-top: 0.35rem !important;
       }
 
       /* Header adjustments */
       .header-badge {
-        display: none;
+        display: none !important;
       }
 
       header h1 {
-        font-size: 0.95rem;
+        font-size: 0.95rem !important;
       }
 
       .header-icon {
-        width: 34px;
-        height: 34px;
-        font-size: 1rem;
-      }
-
-      /* ── Video: bigger on mobile ── */
-      .video-player-wrap video {
-        max-height: none;
-        height: auto;
-        width: 100%;
-      }
-
-      .video-player-wrap {
-        margin-bottom: 0.75rem;
-      }
-
-      /* ── Feedback: smaller / more compact on mobile ── */
-      .feedback-bubble {
-        padding: 0.65rem 0.75rem;
-      }
-
-      .feedback-icon {
-        font-size: 1.1rem;
-        margin-bottom: 4px;
-      }
-
-      .feedback-heading {
-        font-size: 0.65rem;
-        margin-bottom: 4px;
-      }
-
-      .feedback-text {
-        font-size: 0.75rem;
-        line-height: 1.5;
-      }
-
-      .idle-text {
-        font-size: 0.75rem;
-      }
-
-      .idle-icon {
-        font-size: 1.8rem;
-      }
-
-      /* Score rows: smaller text on mobile */
-      .score-dim-name {
-        font-size: 0.65rem;
-      }
-
-      .score-dim-sub {
-        font-size: 0.55rem;
-      }
-
-      .score-chip {
-        width: 30px;
-        height: 22px;
-        font-size: 0.7rem;
+        width: 34px !important;
+        height: 34px !important;
+        font-size: 1rem !important;
       }
     }
 
     /* Very small screens */
     @media (max-width: 360px) {
       .center-panel {
-        padding: 0.75rem;
+        padding: 0.5rem !important;
       }
 
       .scenario-title {
         font-size: 1rem;
-      }
-
-      .dialogue-text {
-        font-size: 0.85rem;
       }
     }
   </style>
@@ -1451,24 +1381,6 @@
       <div class="header-badge">Interactive Training</div>
     </div>
   </header>
-
-  <!-- MOBILE TAB BAR -->
-  <div class="mobile-tab-bar" id="mobileTabBar">
-    <div class="mobile-tabs">
-      <button class="mobile-tab" id="tab-game" onclick="switchMobileTab('game')">
-        <span class="tab-icon">🎬</span>
-        <span>Scenario</span>
-      </button>
-      <button class="mobile-tab" id="tab-profile" onclick="switchMobileTab('profile')">
-        <span class="tab-icon">📊</span>
-        <span>Profile</span>
-      </button>
-      <button class="mobile-tab" id="tab-feedback" onclick="switchMobileTab('feedback')">
-        <span class="tab-icon">💡</span>
-        <span>Feedback</span>
-      </button>
-    </div>
-  </div>
 
   <!-- MAIN -->
   <main id="mainContent">
@@ -1611,6 +1523,15 @@
           <div class="choice-text" id="textB">
             "Certainly. You're welcome to have a look around the restaurant and see if you can find them."
           </div>
+        </div>
+      </div>
+
+      <!-- ── MOBILE FEEDBACK (Shown ONLY on mobile after selecting an answer) ── -->
+      <div id="mobileFeedbackContainer" class="mobile-feedback-container">
+        <div class="feedback-bubble">
+          <div class="feedback-icon">&#128161;</div>
+          <div class="feedback-heading">Feedback</div>
+          <div class="feedback-text" id="mobileFeedbackText"></div>
         </div>
       </div>
 
@@ -2056,6 +1977,14 @@
       document.getElementById('feedbackContent').style.display = 'none';
       document.getElementById('feedbackBubble').classList.remove('revealed');
 
+      // Reset mobile feedback (hidden on new question until answered)
+      const mfc = document.getElementById('mobileFeedbackContainer');
+      if (mfc) {
+        mfc.classList.remove('show-feedback');
+        mfc.style.display = 'none';
+      }
+      const mft = document.getElementById('mobileFeedbackText');
+      if (mft) mft.innerHTML = '';
 
       const dlg = document.getElementById('dialogueBox');
       dlg.classList.remove('animate-in');
@@ -2104,6 +2033,7 @@
           }
         });
 
+        // Desktop feedback panel (revealed on desktop right sidebar)
         const idle = document.getElementById('idlePrompt');
         if (idle) idle.style.display = 'none';
         const fc = document.getElementById('feedbackContent');
@@ -2116,6 +2046,20 @@
           if (fbubble) fbubble.classList.add('revealed');
         }, 750);
 
+        // Mobile feedback (appears ONLY after answering the question)
+        const mfc = document.getElementById('mobileFeedbackContainer');
+        const mft = document.getElementById('mobileFeedbackText');
+        if (mft) mft.innerHTML = s.feedback;
+        if (mfc) {
+          mfc.style.display = 'block';
+          mfc.classList.add('show-feedback');
+          if (window.innerWidth <= 768) {
+            setTimeout(() => {
+              mfc.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 120);
+          }
+        }
+
         dims.forEach(d => {
           const v = scores[d];
           if (typeof v === 'number') { totalScores[d] += v; }
@@ -2126,9 +2070,6 @@
 
         const btn = document.getElementById('btnNext');
         if (btn) btn.disabled = false;
-
-        // On mobile: auto-switch to feedback tab after answer
-        if (window._mobileAutoFeedback) window._mobileAutoFeedback();
       } catch (err) {
         alert("Error in selectChoice: " + err.message);
       }
@@ -2142,8 +2083,9 @@
       }
       currentIdx++;
       loadScenario(currentIdx);
-      // On mobile: switch back to game tab
-      if (isMobile()) switchMobileTab('game');
+      if (window.innerWidth <= 768) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
 
     /* ─── Session Complete Screen ────────────────────────────── */
@@ -2313,62 +2255,6 @@
     }
     loadVoices();
 
-    /* ─── Mobile Tab Switching ──────────────────────────────── */
-    const isMobile = () => window.innerWidth <= 768;
-
-    function switchMobileTab(tab) {
-      const sidebar = document.getElementById('gameSidebar');
-      const center = document.getElementById('centerPanel');
-      const right = document.getElementById('rightPanel');
-      const tabs = document.querySelectorAll('.mobile-tab');
-
-      // Remove active from all panels and tabs
-      [sidebar, center, right].forEach(el => el && el.classList.remove('mobile-active'));
-      tabs.forEach(t => t.classList.remove('active'));
-
-      if (tab === 'profile') {
-        sidebar && sidebar.classList.add('mobile-active');
-        document.getElementById('tab-profile').classList.add('active');
-      } else if (tab === 'feedback') {
-        right && right.classList.add('mobile-active');
-        document.getElementById('tab-feedback').classList.add('active');
-        // Auto-scroll feedback into view
-        if (right) right.scrollTop = 0;
-      } else {
-        center && center.classList.add('mobile-active');
-        document.getElementById('tab-game').classList.add('active');
-      }
-    }
-
-    function initMobileTabs() {
-      if (isMobile()) {
-        switchMobileTab('game');
-      }
-    }
-
-    // Re-init on resize
-    window.addEventListener('resize', () => {
-      if (isMobile()) {
-        // If no tab is active, activate game tab
-        const hasActive = document.querySelector('.mobile-tab.active');
-        if (!hasActive) switchMobileTab('game');
-      } else {
-        // Desktop: remove mobile-active, restore normal display
-        ['gameSidebar', 'centerPanel', 'rightPanel'].forEach(id => {
-          const el = document.getElementById(id);
-          if (el) el.classList.remove('mobile-active');
-        });
-      }
-    });
-
-    // Auto-switch to feedback tab on mobile when user selects a choice
-    window._mobileAutoFeedback = function() {
-      if (isMobile()) {
-        // Wait until feedback bubble is revealed (750ms) then switch tab
-        setTimeout(() => switchMobileTab('feedback'), 1000);
-      }
-    };
-
     function startTraining() {
       loadVoices();
       const screen = document.getElementById('startScreen');
@@ -2376,7 +2262,6 @@
       setTimeout(() => {
         screen.style.display = 'none';
         loadScenario(0);
-        initMobileTabs();
       }, 400);
     }
   </script>

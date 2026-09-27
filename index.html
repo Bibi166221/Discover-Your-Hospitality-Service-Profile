@@ -3,7 +3,10 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>Hospitality Service Profile</title>
   <meta name="description"
     content="An interactive hospitality service assessment tool that builds your service profile through scenario-based learning." />
@@ -80,8 +83,8 @@
     header {
       background: linear-gradient(135deg, var(--teal-800) 0%, var(--teal-900) 100%);
       border-bottom: 1px solid var(--border2);
-      padding: 0 2rem;
-      height: 70px;
+      padding: 0 1.25rem;
+      height: 60px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -112,7 +115,7 @@
 
     header h1 {
       font-family: 'Playfair Display', serif;
-      font-size: 1.35rem;
+      font-size: 1.1rem;
       font-weight: 700;
       color: var(--text-primary);
       letter-spacing: 0.01em;
@@ -143,17 +146,17 @@
     main {
       flex: 1;
       display: grid;
-      grid-template-columns: 1fr 340px;
+      grid-template-columns: 1fr 320px;
       gap: 0;
-      height: calc(100vh - 70px);
+      height: calc(100dvh - 60px);
       overflow: hidden;
     }
 
-    /* ─── Sidebar ───────────────────────────────────────────────────── */
+    /* ─── Sidebar (hidden on desktop, shown on mobile tab) ─────────── */
     .sidebar {
       background: var(--surface);
       border-right: 1px solid var(--border);
-      display: flex;
+      display: none;
       flex-direction: column;
       overflow-y: auto;
       padding: 1.5rem;
@@ -489,7 +492,7 @@
     .choices-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1rem;
+      gap: 0.85rem;
     }
 
     .choice-card {
@@ -1089,6 +1092,211 @@
       text-transform: uppercase;
       flex-shrink: 0;
     }
+
+    /* ─── Mobile Feedback Box (Hidden on desktop) ───────────── */
+    .mobile-feedback-container {
+      display: none;
+    }
+
+    /* ─── Responsive Breakpoints (Mobile Only) ───────────────── */
+    @media (max-width: 768px) {
+      html {
+        font-size: 15px;
+      }
+
+      .mobile-tab-bar {
+        display: none !important;
+      }
+
+      main {
+        display: block !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+
+      .sidebar {
+        display: none !important;
+      }
+
+      .right-panel {
+        display: none !important;
+      }
+
+      .center-panel {
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 0.75rem 0.85rem !important;
+        gap: 0.75rem !important;
+        height: auto !important;
+        min-height: calc(100dvh - 60px) !important;
+        overflow-y: visible !important;
+      }
+
+      /* Start screen: single column */
+      #startScreen > div {
+        grid-template-columns: 1fr !important;
+        gap: 1.25rem !important;
+        padding: 1.25rem !important;
+        max-height: 90dvh;
+        overflow-y: auto;
+      }
+
+      #startScreen > div > div:first-child img {
+        max-width: 190px !important;
+      }
+
+      #startScreen h1 {
+        font-size: 1.45rem !important;
+      }
+
+      /* Scenario header */
+      .scenario-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+      }
+
+      .scenario-title {
+        font-size: 1.15rem;
+      }
+
+      /* Video: prominent and full-width on phone */
+      .dialogue-box {
+        padding: 0.4rem !important;
+        border-radius: var(--radius-md) !important;
+      }
+
+      .video-player-wrap {
+        margin-bottom: 0 !important;
+        border-radius: var(--radius-sm) !important;
+      }
+
+      .video-player-wrap video {
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        max-height: 50vh !important;
+        aspect-ratio: 16 / 9;
+        object-fit: contain !important;
+      }
+
+      /* Choice cards: stacked full-width for touch */
+      .choices-grid {
+        grid-template-columns: 1fr !important;
+        gap: 0.65rem !important;
+      }
+
+      .choice-card {
+        padding: 0.85rem 1rem !important;
+      }
+
+      .choice-card:active {
+        transform: scale(0.98);
+      }
+
+      /* Mobile Feedback: shown ONLY after answering the question on mobile */
+      .mobile-feedback-container {
+        display: none;
+        margin-top: 0.25rem;
+      }
+
+      .mobile-feedback-container.show-feedback {
+        display: block !important;
+        animation: fadeIn 0.35s ease forwards;
+      }
+
+      .mobile-feedback-container .feedback-bubble {
+        opacity: 1 !important;
+        transform: none !important;
+        padding: 0.8rem 1rem !important;
+        border-radius: var(--radius-md) !important;
+        background: var(--surface2) !important;
+        border: 1px solid var(--gold-400) !important;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4) !important;
+      }
+
+      .mobile-feedback-container .feedback-icon {
+        font-size: 1.25rem !important;
+        margin-bottom: 4px !important;
+      }
+
+      .mobile-feedback-container .feedback-heading {
+        font-size: 0.72rem !important;
+        font-weight: 700 !important;
+        color: var(--gold-300) !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.08em !important;
+        margin-bottom: 4px !important;
+      }
+
+      .mobile-feedback-container .feedback-text {
+        font-size: 0.84rem !important;
+        line-height: 1.55 !important;
+        color: var(--text-primary) !important;
+      }
+
+      /* Video controls */
+      .vc-vol,
+      .vc-label {
+        display: none !important;
+      }
+
+      .vc-bar {
+        padding: 8px 10px !important;
+        gap: 10px !important;
+      }
+
+      .vc-btn {
+        font-size: 1.1rem !important;
+        padding: 4px 6px !important;
+        min-width: 34px !important;
+        min-height: 34px !important;
+      }
+
+      .vc-seek {
+        height: 6px !important;
+      }
+
+      .vc-seek::-webkit-slider-thumb {
+        width: 16px !important;
+        height: 16px !important;
+      }
+
+      /* Next button: full width on mobile */
+      .btn-next {
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 13px 20px !important;
+        font-size: 0.98rem !important;
+        margin-top: 0.35rem !important;
+      }
+
+      /* Header adjustments */
+      .header-badge {
+        display: none !important;
+      }
+
+      header h1 {
+        font-size: 0.95rem !important;
+      }
+
+      .header-icon {
+        width: 34px !important;
+        height: 34px !important;
+        font-size: 1rem !important;
+      }
+    }
+
+    /* Very small screens */
+    @media (max-width: 360px) {
+      .center-panel {
+        padding: 0.5rem !important;
+      }
+
+      .scenario-title {
+        font-size: 1rem;
+      }
+    }
   </style>
 </head>
 
@@ -1096,7 +1304,7 @@
 
   <!-- START SCREEN -->
   <div id="startScreen"
-    style="position:fixed; top:0; left:0; width:100%; height:100%; background:var(--teal-900); z-index:9999; display:flex; align-items:center; justify-content:center; padding:1rem; overflow-y:auto; transition:opacity 0.4s;">
+    style="position:fixed; top:0; left:0; width:100%; height:100%; background:var(--teal-900); z-index:9999; display:flex; align-items:flex-start; justify-content:center; padding:1rem; overflow-y:auto; transition:opacity 0.4s;">
     <div
       style="max-width:950px; width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:16px; padding:2rem; box-shadow:0 10px 40px rgba(0,0,0,0.5); display:grid; grid-template-columns: 1fr 1.2fr; gap:2.5rem; align-items:center;">
 
@@ -1175,7 +1383,7 @@
   </header>
 
   <!-- MAIN -->
-  <main>
+  <main id="mainContent">
 
     <!-- ════════════════ SIDEBAR ════════════════ -->
     <aside class="sidebar" id="gameSidebar" style="display:none">
@@ -1256,7 +1464,7 @@
     </aside>
 
     <!-- ════════════════ CENTER PANEL ════════════════ -->
-    <section class="center-panel">
+    <section class="center-panel" id="centerPanel">
 
       <div class="scenario-header">
         <div>
@@ -1318,6 +1526,15 @@
         </div>
       </div>
 
+      <!-- ── MOBILE FEEDBACK (Shown ONLY on mobile after selecting an answer) ── -->
+      <div id="mobileFeedbackContainer" class="mobile-feedback-container">
+        <div class="feedback-bubble">
+          <div class="feedback-icon">&#128161;</div>
+          <div class="feedback-heading">Feedback</div>
+          <div class="feedback-text" id="mobileFeedbackText"></div>
+        </div>
+      </div>
+
       <div style="display:flex;justify-content:flex-end;align-items:center;margin-top:1rem">
         <button class="btn-next" id="btnNext" onclick="nextScenario()" disabled>
           Next Scenario <span id="btnNextLabel">&#8594;</span>
@@ -1326,7 +1543,7 @@
     </section>
 
     <!-- ════════════════ RIGHT PANEL ════════════════ -->
-    <aside class="right-panel" id="rightPanel">
+    <aside class="right-panel" id="rightPanel" style="order:3">
 
       <div class="section-label">Feedback</div>
 
@@ -1760,6 +1977,14 @@
       document.getElementById('feedbackContent').style.display = 'none';
       document.getElementById('feedbackBubble').classList.remove('revealed');
 
+      // Reset mobile feedback (hidden on new question until answered)
+      const mfc = document.getElementById('mobileFeedbackContainer');
+      if (mfc) {
+        mfc.classList.remove('show-feedback');
+        mfc.style.display = 'none';
+      }
+      const mft = document.getElementById('mobileFeedbackText');
+      if (mft) mft.innerHTML = '';
 
       const dlg = document.getElementById('dialogueBox');
       dlg.classList.remove('animate-in');
@@ -1768,6 +1993,26 @@
 
       // Load (or reset) the video for this scenario
       loadVideoForScenario(s);
+    }
+
+    /* ─── Update Sidebar Scores ────────────────────────────── */
+    function updateSidebarScores() {
+      dims.forEach(d => {
+        const pct = totalMax[d] > 0 ? Math.min(100, Math.round((totalScores[d] / totalMax[d]) * 100)) : 0;
+        const el = document.getElementById(`score-${d}`);
+        if (el) el.textContent = pct + '%';
+      });
+      const statEl = document.getElementById('statCompleted');
+      if (statEl) statEl.textContent = completedCount;
+      const avgEl = document.getElementById('statScore');
+      if (avgEl) {
+        const vals = dims.filter(d => totalMax[d] > 0).map(d => Math.min(100, Math.round((totalScores[d] / totalMax[d]) * 100)));
+        avgEl.textContent = vals.length ? Math.round(vals.reduce((a, b) => a + b, 0) / vals.length) + '%' : '—';
+      }
+      // Animate radar
+      const radarTarget = {};
+      dims.forEach(d => { radarTarget[d] = totalMax[d] > 0 ? Math.min(100, Math.round((totalScores[d] / totalMax[d]) * 100)) : 0; });
+      animateRadar(radarTarget);
     }
 
     /* ─── Select Choice ─────────────────────────────────────── */
@@ -1788,6 +2033,7 @@
           }
         });
 
+        // Desktop feedback panel (revealed on desktop right sidebar)
         const idle = document.getElementById('idlePrompt');
         if (idle) idle.style.display = 'none';
         const fc = document.getElementById('feedbackContent');
@@ -1800,7 +2046,19 @@
           if (fbubble) fbubble.classList.add('revealed');
         }, 750);
 
-
+        // Mobile feedback (appears ONLY after answering the question)
+        const mfc = document.getElementById('mobileFeedbackContainer');
+        const mft = document.getElementById('mobileFeedbackText');
+        if (mft) mft.innerHTML = s.feedback;
+        if (mfc) {
+          mfc.style.display = 'block';
+          mfc.classList.add('show-feedback');
+          if (window.innerWidth <= 768) {
+            setTimeout(() => {
+              mfc.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 120);
+          }
+        }
 
         dims.forEach(d => {
           const v = scores[d];
@@ -1808,6 +2066,7 @@
         });
 
         completedCount++;
+        updateSidebarScores();
 
         const btn = document.getElementById('btnNext');
         if (btn) btn.disabled = false;
@@ -1824,6 +2083,9 @@
       }
       currentIdx++;
       loadScenario(currentIdx);
+      if (window.innerWidth <= 768) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
 
     /* ─── Session Complete Screen ────────────────────────────── */
@@ -1903,29 +2165,33 @@
         };
         const minInfo = weakestDesc[minD];
 
-        document.querySelector('main').innerHTML = `
-          <div style="grid-column:1/-1;display:flex;align-items:center;justify-content:center;min-height:100%;background:var(--teal-900);padding:2rem;">
-            <div style="text-align:center;max-width:900px;width:100%;">
-              <div style="font-size:4rem;margin-bottom:1rem;">🏆</div>
-              <h2 style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--gold-400);margin-bottom:0.5rem;">Session Complete!</h2>
-              <p style="color:var(--text-muted);font-size:0.95rem;margin-bottom:2.5rem;">You've completed all ${TOTAL_QUESTIONS} scenarios. Here's your full performance summary.</p>
+        // Hide mobile tab bar on completion
+        const mobileTabBar = document.getElementById('mobileTabBar');
+        if (mobileTabBar) mobileTabBar.style.display = 'none';
 
-            <div style="display:flex; flex-direction:row; align-items:center; justify-content:center; gap:3rem; margin-bottom:2.5rem; flex-wrap:wrap;">
-              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:2rem;">
-                <canvas id="radarCanvas" width="280" height="280" style="display:block;margin:0 auto;"></canvas>
+        document.querySelector('main').innerHTML = `
+          <div style="display:flex;align-items:flex-start;justify-content:center;min-height:100%;background:var(--teal-900);padding:1.5rem;overflow-y:auto;">
+            <div style="text-align:center;max-width:900px;width:100%;padding-bottom:2rem;">
+              <div style="font-size:3.5rem;margin-bottom:0.75rem;">🏆</div>
+              <h2 style="font-family:'Playfair Display',serif;font-size:clamp(1.4rem,5vw,2rem);color:var(--gold-400);margin-bottom:0.5rem;">Session Complete!</h2>
+              <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:2rem;">You've completed all ${TOTAL_QUESTIONS} scenarios. Here's your full performance summary.</p>
+
+            <div style="display:flex;flex-direction:row;align-items:flex-start;justify-content:center;gap:2rem;margin-bottom:2rem;flex-wrap:wrap;">
+              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:1.5rem;flex-shrink:0;">
+                <canvas id="radarCanvas" width="240" height="240" style="display:block;margin:0 auto;"></canvas>
               </div>
-              <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;text-align:left;">
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;text-align:left;flex:1;min-width:0;">
                 ${dims.map(d => {
           const pct = totalMax[d] > 0 ? Math.min(100, Math.round((totalScores[d] / totalMax[d]) * 100)) : 0;
           const stars = getStars(pct);
-          return `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:1.2rem;min-width:180px;">
-                                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-                                      <div style="font-size:1.5rem; font-weight:900; color:${dimColors[d]}">${d}</div>
-                                      <div style="font-size:0.85rem;font-weight:700;color:${dimColors[d]};line-height:1.2;">${dimNames[d]}</div>
-                                      <div style="margin-left:auto; font-size:1.2rem; font-weight:800; color:${dimColors[d]}">${pct}%</div>
+          return `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:1rem;">
+                                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                                      <div style="font-size:1.3rem;font-weight:900;color:${dimColors[d]};flex-shrink:0;">${d}</div>
+                                      <div style="font-size:0.78rem;font-weight:700;color:${dimColors[d]};line-height:1.2;">${dimNames[d]}</div>
+                                      <div style="margin-left:auto;font-size:1.1rem;font-weight:800;color:${dimColors[d]};flex-shrink:0;">${pct}%</div>
                                     </div>
-                                    <div style="font-size:0.85rem; color:var(--gold-400); margin-bottom:8px;">${stars}</div>
-                                    <div style="width:100%;height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden;">
+                                    <div style="font-size:0.8rem;color:var(--gold-400);margin-bottom:6px;">${stars}</div>
+                                    <div style="width:100%;height:7px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden;">
                                       <div style="width:${pct}%;height:100%;background:${dimColors[d]};border-radius:4px;"></div>
                                     </div>
                                   </div>`;
@@ -1933,25 +2199,25 @@
               </div>
             </div>
 
-            <div style="background:var(--surface2);border:1px solid var(--border2);border-radius:16px;padding:2rem;margin-bottom:2rem;max-width:600px;margin-left:auto;margin-right:auto;">
-              <div style="font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem;">Overall Average Score</div>
-              <div style="font-size:3rem;font-weight:800;color:var(--gold-300);line-height:1;">${avg}% <span style="font-size:1.5rem;color:var(--gold-400);vertical-align:middle;margin-left:8px;">${profileStars}</span></div>
-              <div style="font-size:0.8rem;color:var(--text-muted);margin-top:0.5rem;">Across ${completedCount} completed scenarios</div>
+            <div style="background:var(--surface2);border:1px solid var(--border2);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem;max-width:600px;margin-left:auto;margin-right:auto;">
+              <div style="font-size:0.72rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem;">Overall Average Score</div>
+              <div style="font-size:clamp(2rem,8vw,3rem);font-weight:800;color:var(--gold-300);line-height:1;">${avg}% <span style="font-size:clamp(1rem,4vw,1.5rem);color:var(--gold-400);vertical-align:middle;margin-left:8px;">${profileStars}</span></div>
+              <div style="font-size:0.78rem;color:var(--text-muted);margin-top:0.5rem;">Across ${completedCount} completed scenarios</div>
               
-              <hr style="border:none;border-top:1px solid var(--border);margin:1.5rem 0;">
+              <hr style="border:none;border-top:1px solid var(--border);margin:1.25rem 0;">
               
-              <div style="font-size:1.2rem;font-weight:800;color:var(--gold-100);margin-bottom:0.5rem;">${profileTitle}</div>
-              <div style="font-size:0.95rem;color:var(--text-muted);line-height:1.5;text-align:left;">${profileDesc}</div>
+              <div style="font-size:1.1rem;font-weight:800;color:var(--gold-100);margin-bottom:0.5rem;">${profileTitle}</div>
+              <div style="font-size:0.9rem;color:var(--text-muted);line-height:1.5;text-align:left;">${profileDesc}</div>
               
-              <hr style="border:none;border-top:1px solid var(--border);margin:1.5rem 0;">
+              <hr style="border:none;border-top:1px solid var(--border);margin:1.25rem 0;">
               
-              <div style="font-size:1.1rem;font-weight:800;color:${dimColors[maxD]};margin-bottom:0.5rem;">${maxInfo.title}</div>
-              <div style="font-size:0.95rem;color:var(--text-muted);line-height:1.5;text-align:left;">${maxInfo.text}</div>
+              <div style="font-size:1rem;font-weight:800;color:${dimColors[maxD]};margin-bottom:0.5rem;">${maxInfo.title}</div>
+              <div style="font-size:0.88rem;color:var(--text-muted);line-height:1.5;text-align:left;">${maxInfo.text}</div>
 
-              <hr style="border:none;border-top:1px solid var(--border);margin:1.5rem 0;">
+              <hr style="border:none;border-top:1px solid var(--border);margin:1.25rem 0;">
               
-              <div style="font-size:1.1rem;font-weight:800;color:${dimColors[minD]};margin-bottom:0.5rem;">${minInfo.title}</div>
-              <div style="font-size:0.95rem;color:var(--text-muted);line-height:1.5;text-align:left;">${minInfo.text}</div>
+              <div style="font-size:1rem;font-weight:800;color:${dimColors[minD]};margin-bottom:0.5rem;">${minInfo.title}</div>
+              <div style="font-size:0.88rem;color:var(--text-muted);line-height:1.5;text-align:left;">${minInfo.text}</div>
             </div>
 
             <button onclick="location.reload()" style="background:linear-gradient(135deg,var(--gold-500),var(--gold-400));color:var(--teal-900);border:none;border-radius:10px;padding:14px 36px;font-size:1rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;box-shadow:0 4px 20px rgba(212,160,23,0.35);">↺ Restart Training</button>
