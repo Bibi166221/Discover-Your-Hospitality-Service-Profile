@@ -2362,12 +2362,10 @@
     });
 
     // Auto-switch to feedback tab on mobile when user selects a choice
-    const _origSelectChoice = selectChoice;
-    // Patch selectChoice to also switch tab on mobile after selection
-    const origSelectChoice = selectChoice;
     window._mobileAutoFeedback = function() {
       if (isMobile()) {
-        setTimeout(() => switchMobileTab('feedback'), 900);
+        // Wait until feedback bubble is revealed (750ms) then switch tab
+        setTimeout(() => switchMobileTab('feedback'), 1000);
       }
     };
 
@@ -2377,9 +2375,6 @@
       screen.style.opacity = '0';
       setTimeout(() => {
         screen.style.display = 'none';
-        // Show sidebar after game starts
-        const sidebar = document.getElementById('gameSidebar');
-        if (sidebar) sidebar.style.display = '';
         loadScenario(0);
         initMobileTabs();
       }, 400);
