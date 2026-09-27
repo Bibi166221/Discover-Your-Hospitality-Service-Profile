@@ -1689,6 +1689,7 @@
     }
 
     function vcReplay() {
+      hasSpokenPrompt = false;
       vid.currentTime = 0;
       vid.play();
     }
@@ -1703,10 +1704,14 @@
 
     vid.addEventListener('play', () => { document.getElementById('vcPlay').textContent = '⏸'; });
     vid.addEventListener('pause', () => { document.getElementById('vcPlay').textContent = '▶'; });
+
+    /* ─── Prompt Speech (What would you likely say?) ────────── */
     let hasSpokenPrompt = false;
 
     function getBestFemaleVoice() {
-      const voices = (speechSynthesis.getVoices().length > 0 ? speechSynthesis.getVoices() : systemVoices);
+      if (!('speechSynthesis' in window)) return null;
+      let voices = speechSynthesis.getVoices();
+      if (!voices || voices.length === 0) voices = systemVoices;
       if (!voices || voices.length === 0) return null;
 
       const enVoices = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith('en'));
@@ -1715,7 +1720,7 @@
       const maleNames = ['david', 'mark', 'daniel', 'george', 'arthur', 'james', 'guy', 'christopher', 'eric', 'stefan', 'ryan', 'richard', 'paul', 'alex', 'fred', 'oliver', 'tom', 'aaron', 'gordon', 'male'];
 
       // Priority 1: High quality known female neural / natural voices
-      const priorityFemale = ['jenny', 'aria', 'zira', 'samantha', 'victoria', 'karen', 'hazel', 'google uk english female', 'google us english'];
+      const priorityFemale = ['jenny', 'aria', 'zira', 'samantha', 'victoria', 'karen', 'hazel', 'google uk english female', 'google us english female', 'google us english'];
       for (const name of priorityFemale) {
         const found = pool.find(v => {
           const n = v.name.toLowerCase();
@@ -1743,28 +1748,62 @@
 
     function speakPrompt() {
       if (!('speechSynthesis' in window)) return;
-      speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance("What would you likely say?");
-      utterance.rate = 0.92;
-      utterance.pitch = 1.25;
+      try {
+        speechSynthesis.cancel();
+        setTimeout(() => {
+          try {
+            if (speechSynthesis.paused) {
+              speechSynthesis.resume();
+            }
+            const utterance = new SpeechSynthesisUtterance("What would you likely say?");
+            utterance.rate = 0.92;
+            utterance.pitch = 1.18;
+            utterance.lang = 'en-US';
+            utterance.volume = 1.0;
 
-      const femaleVoice = getBestFemaleVoice();
-      if (femaleVoice) {
-        utterance.voice = femaleVoice;
-        utterance.pitch = 1.15;
+            const femaleVoice = getBestFemaleVoice();
+            if (femaleVoice) {
+              utterance.voice = femaleVoice;
+            }
+
+            speechSynthesis.speak(utterance);
+          } catch (e) {
+            console.warn('Speech synthesis playback error:', e);
+          }
+        }, 50);
+      } catch (err) {
+        console.warn('Speech synthesis error:', err);
       }
+    }
 
-      speechSynthesis.speak(utterance);
+    function triggerPromptAudio() {
+      if (hasSpokenPrompt) return;
+      hasSpokenPrompt = true;
+      document.getElementById('vcPlay').textContent = '▶';
+      setTimeout(() => {
+        speakPrompt();
+      }, 250);
     }
 
     vid.addEventListener('ended', () => {
-      document.getElementById('vcPlay').textContent = '▶';
-      if (!hasSpokenPrompt) {
-        hasSpokenPrompt = true;
-        speakPrompt();
+      triggerPromptAudio();
+    });
+
+    // Detect when video reaches end or stops near end
+    vid.addEventListener('timeupdate', () => {
+      vcUpdateTime();
+      if (vid.duration && vid.currentTime >= vid.duration - 0.25) {
+        triggerPromptAudio();
       }
     });
-    // Robust Stall Monitor for freezing MP4s
+
+    vid.addEventListener('pause', () => {
+      if (vid.duration && vid.currentTime >= vid.duration - 0.35) {
+        triggerPromptAudio();
+      }
+    });
+
+    // Stall Monitor for MP4 videos that freeze on the final frame
     let vidStallMonitor = null;
     let vidLastTime = -1;
     let vidStallCount = 0;
@@ -1775,13 +1814,12 @@
       vidStallCount = 0;
       vidStallMonitor = setInterval(() => {
         if (!vid.paused && vid.readyState >= 2) {
-          if (vid.currentTime === vidLastTime) {
+          if (Math.abs(vid.currentTime - vidLastTime) < 0.05) {
             vidStallCount++;
-            // If stalled for 800ms, assume frozen at end
-            if (vidStallCount >= 8 && vid.currentTime > 0) {
-              if (!hasSpokenPrompt) {
-                vid.pause();
-                vid.dispatchEvent(new Event('ended'));
+            // If stalled for 500ms and past 1 second
+            if (vidStallCount >= 5 && vid.currentTime > 1) {
+              if (vid.duration && vid.currentTime >= vid.duration - 1.0) {
+                triggerPromptAudio();
               }
             }
           } else {
@@ -1792,9 +1830,6 @@
       }, 100);
     }
 
-    vid.addEventListener('timeupdate', () => {
-      vcUpdateTime();
-    });
     vid.addEventListener('loadedmetadata', vcUpdateTime);
 
     /* If the video file is missing or fails to load → show placeholder instead */
@@ -1831,6 +1866,8 @@
         } else {
           vid.currentTime = 0;
         }
+
+        startStallMonitor();
 
         const p = vid.play();
         if (p && p.catch) {
@@ -2257,6 +2294,13 @@
 
     function startTraining() {
       loadVoices();
+      if ('speechSynthesis' in window) {
+        try {
+          const unlock = new SpeechSynthesisUtterance(' ');
+          unlock.volume = 0.01;
+          speechSynthesis.speak(unlock);
+        } catch (e) {}
+      }
       const screen = document.getElementById('startScreen');
       screen.style.opacity = '0';
       setTimeout(() => {
